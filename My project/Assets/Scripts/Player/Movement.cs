@@ -17,7 +17,11 @@ public class Movement : MonoBehaviour
 
     public void Move(Vector2 newMoveVector)
     {
-        MoveVector = newMoveVector;
+        if (newMoveVector != null)
+        {
+            MoveVector = newMoveVector;
+
+        }
     }
 
     private void FixedUpdate()

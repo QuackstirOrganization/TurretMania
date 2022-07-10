@@ -87,6 +87,11 @@ namespace TurretGame
 
         void OnPlayerDeath()
         {
+            GlobalDebugs.DebugPM(this, "Is Dead");
+        }
+
+        private void OnDestroy()
+        {
             //Unsubscribe from all events
             PlayerHealth.DeathAction -= OnPlayerDeath;
             PlayerHealth.DamageAction -= OnPlayerDamage;
