@@ -474,6 +474,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0ea0295b112108b44adc3c0dd1e296d6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  Weapons:
+  - {fileID: 11400000, guid: 5f8f4822871befd4fa151a2e512032fd, type: 2}
+  - {fileID: 11400000, guid: ddff9893e2972c14bbab2195dbfc3f74, type: 2}
+  - {fileID: 11400000, guid: c68acf4724535ae4b88bc304d7ef5d3c, type: 2}
+  UI_playerAmmo: {fileID: 0}
 --- !u!1 &5102982184594753207
 GameObject:
   m_ObjectHideFlags: 0
@@ -880,8 +885,10 @@ MonoBehaviour:
   ShootSFX: {fileID: 8300000, guid: eb213d6e3d9b931458e3d5f8cfc3f58d, type: 3}
   Projectile: {fileID: 766331205781844054, guid: a6257f6305452e340a76d766d5c018e1, type: 3}
   ProjectileSpeed: 20
+  damage: 5
   angle: {x: 0, y: 0, z: 0}
-  ammoThing: {fileID: 5102982184546042391}
+  fireRate: 5
+  isShooting: 0
 --- !u!82 &5102982185570386102
 AudioSource:
   m_ObjectHideFlags: 0

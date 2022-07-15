@@ -10,6 +10,9 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 1d6a94b8b24b77f47802f5a2594e3e6f, type: 3}
-  m_Name: Qucik
+  m_Name: Shotgun
   m_EditorClassIdentifier: 
-  movementSpeed: 20
+  damage: 10
+  fireRate: 0.5
+  projectileSpeed: 5
+  ammo: 5

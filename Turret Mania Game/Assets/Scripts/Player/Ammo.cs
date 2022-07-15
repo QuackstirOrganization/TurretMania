@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class Ammo : MonoBehaviour
 {
-    [HideInInspector] public int CurrAmmo;
+    public int CurrAmmo;
     public int MaxAmmo;
 
     public float GunRecoilSpeed;
@@ -25,6 +25,9 @@ public class Ammo : MonoBehaviour
     [Header("References")]
     private AudioSource AS;
     private Rigidbody2D Rb2D;
+
+    //[Header("Events")]
+    public event Action ReloadAction;
 
     // Start is called before the first frame update
     void Start()
@@ -65,6 +68,8 @@ public class Ammo : MonoBehaviour
 
         if (collision.CompareTag("Weapon"))
         {
+            ReloadAction();
+
             TurretSprite.enabled = true;
             AS.PlayOneShot(ReloadSFX);
             Destroy(collision.gameObject);

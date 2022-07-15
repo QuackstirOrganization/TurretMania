@@ -12,26 +12,40 @@ public class Shoot : MonoBehaviour
     [Header("Projectile")]
     public GameObject Projectile;
     public float ProjectileSpeed;
+    public float damage;
 
     public Vector3 angle;
 
-    public Ammo ammoThing;
+    public event Action ShootAction;
 
-    public event Action<int> ShootAction;
+    public float fireRate;
+    private float lastTimeFired;
+
+    public bool isShooting;
 
     private void Start()
     {
         AS = GetComponent<AudioSource>();
     }
 
+    public void isShoot()
+    {
+        if (Time.time - lastTimeFired > 1 / fireRate)
+        {
+            lastTimeFired = Time.time;
+            ShootWeapon();
+        }
+    }
+
     public void ShootWeapon()
     {
-        ShootAction(ammoThing.CurrAmmo);
+        ShootAction();
 
         angle = (this.transform.position - mousePos.position);
 
         GameObject ProjectileShot = Instantiate(Projectile, BulletOrigin.position, Quaternion.identity);
         ProjectileShot.GetComponent<Rigidbody2D>().velocity = -transform.up * ProjectileSpeed;
+        ProjectileShot.GetComponent<DamageEnemy>().Damage = damage;
         ProjectileShot.transform.rotation = transform.rotation;
 
         AS.PlayOneShot(ShootSFX);

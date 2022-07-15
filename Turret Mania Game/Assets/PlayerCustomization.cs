@@ -7,8 +7,8 @@ namespace TurretGame
 {
     public class PlayerCustomization : MonoBehaviour
     {
-        public TurretHead Head;
-        public TurretBottom Bottom;
+        public Turret TurretType;
+        public TurretWeapon[] TurretWeapons;
 
         // Start is called before the first frame update
         void Awake()
@@ -19,14 +19,14 @@ namespace TurretGame
 
         }
 
-        public void HeadSelect(TurretHead newHead)
+        public void HeadSelect(Turret newHead)
         {
-            Head = newHead;
+            TurretType = newHead;
         }
 
-        public void BottomSelect(TurretBottom newBottom)
+        public void BottomSelect(TurretWeapon newBottom)
         {
-            Bottom = newBottom;
+            //TurretWeapons = newBottom;
         }
 
         void InitializeStats()
@@ -49,16 +49,17 @@ namespace TurretGame
             PlayerMovement = Player.GetComponent<Movement>();
             PlayerShooting = Player.GetComponentInChildren<Shoot>();
 
-            if (Head != null)
+            if (TurretType != null)
             {
-                PlayerHealth.maxHealth = Head.Health;
-                PlayerAmmo.MaxAmmo = Head.Ammo;
-                PlayerShooting.ProjectileSpeed = Head.ProjectileSpeed;
+                PlayerHealth.maxHealth = TurretType.Health;
+                PlayerMovement.Speed = TurretType.movementSpeed;
             }
 
-            if (Bottom != null)
+            if (TurretWeapons != null)
             {
-                PlayerMovement.Speed = Bottom.movementSpeed;
+                //PlayerShooting.ProjectileSpeed = Head.ProjectileSpeed;
+                PlayerShooting.ProjectileSpeed = TurretWeapons[0].projectileSpeed;
+
             }
         }
 

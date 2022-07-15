@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.UI;
 using Debugs;
 
 namespace TurretGame
@@ -13,11 +14,15 @@ namespace TurretGame
         private Shoot PlayerShooting;
         private Movement PlayerMovement;
         private PlayerInputManager PlayerInput;
+        public TurretWeapon[] Weapons;
 
         private Vector2 moveVectorTot;
 
+        public Text UI_playerAmmo;
+
         void Start()
         {
+
             //Find player components
             #region Player Components
             PlayerHealth = this.GetComponent<Health>();
@@ -39,13 +44,20 @@ namespace TurretGame
             PlayerInput.HorizontalMoveAction += OnPlayerHorizontalMove;
             PlayerInput.VerticalMoveAction += OnPlayerVerticalMove;
 
+            //Subscribe to player shoot events
+            PlayerShooting.ShootAction += OnProjectileShot;
+
+            //Subscribe to player ammo events
+            PlayerAmmo.ReloadAction += reloadingWeapon;
+
             #endregion
+            selectWeapon(0);
         }
 
         #region Input Functions
 
         //Shooting Function
-        #region Shooting Function
+        #region Shooting Functions
         void OnPlayerShoot()
         {
             if (PlayerAmmo.CurrAmmo <= 0)
@@ -53,15 +65,26 @@ namespace TurretGame
                 return;
             }
 
-            PlayerAmmo.CurrAmmo--;
-            PlayerShooting.ShootWeapon();
+            PlayerShooting.isShoot();
 
             if (PlayerAmmo.CurrAmmo <= 0)
             {
                 PlayerAmmo.RecoilWeapon();
             }
         }
+
+        void OnProjectileShot()
+        {
+            PlayerAmmo.CurrAmmo--;
+            UpdateAmmoUI();
+        }
+
+        void UpdateAmmoUI()
+        {
+            UI_playerAmmo.text = "" + PlayerAmmo.CurrAmmo;
+        }
         #endregion
+
 
         //Movement Function
         #region Movement Functions
@@ -96,14 +119,35 @@ namespace TurretGame
             PlayerHealth.DeathAction -= OnPlayerDeath;
             PlayerHealth.DamageAction -= OnPlayerDamage;
 
+            //Subscribe to player input events
             PlayerInput.ShootAction -= OnPlayerShoot;
             PlayerInput.HorizontalMoveAction -= OnPlayerHorizontalMove;
             PlayerInput.VerticalMoveAction -= OnPlayerVerticalMove;
+
+            //Subscribe to player shoot events
+            PlayerShooting.ShootAction -= OnProjectileShot;
+
+            //Subscribe to player ammo events
+            PlayerAmmo.ReloadAction -= reloadingWeapon;
         }
 
         void OnPlayerDamage(float Health)
         {
             GlobalDebugs.DebugPM(this, "Health: " + Health);
+        }
+
+        void reloadingWeapon()
+        {
+            selectWeapon(Random.Range(0, Weapons.Length));
+            Invoke("UpdateAmmoUI", 0.1f);
+        }
+
+        void selectWeapon(int indexWant)
+        {
+            PlayerShooting.ProjectileSpeed = Weapons[indexWant].projectileSpeed;
+            PlayerShooting.damage = Weapons[indexWant].damage;
+            PlayerShooting.fireRate = Weapons[indexWant].fireRate;
+            PlayerAmmo.MaxAmmo = Weapons[indexWant].ammo;
         }
     }
 }
