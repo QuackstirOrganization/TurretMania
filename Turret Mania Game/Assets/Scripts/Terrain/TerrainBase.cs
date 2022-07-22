@@ -6,6 +6,7 @@ namespace TurretGame
 {
     public class TerrainBase : MonoBehaviour
     {
+        //ducks
         [SerializeField] protected EffectBase[] _effects;
         // Start is called before the first frame update
         protected virtual void Start()
