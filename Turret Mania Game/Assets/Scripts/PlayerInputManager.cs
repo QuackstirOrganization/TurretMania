@@ -14,31 +14,19 @@ namespace TurretGame
 
         #region Events
         public event Action ShootAction;
-        public event Action<float> HorizontalMoveAction;
-        public event Action<float> VerticalMoveAction;
+        public event Action<float, float> MoveAction;
         #endregion
 
         // Update is called once per frame
         void Update()
         {
-            HorizontalMoveAction(Input.GetAxisRaw(HorizontalMoveInput));
-            VerticalMoveAction(Input.GetAxisRaw(VerticalMoveInput));
+            MoveAction(Input.GetAxisRaw(HorizontalMoveInput),
+                Input.GetAxisRaw(VerticalMoveInput));
 
             if (Input.GetButton(ShootInput))
             {
                 ShootAction();
             }
-
-            //if (Input.GetButtonDown(ShootInput))
-            //{
-            //    isShooting = true;
-            //}
-
-            //if (Input.GetButtonUp(ShootInput))
-            //{
-            //    isShooting = false;
-
-            //}
         }
     }
 }

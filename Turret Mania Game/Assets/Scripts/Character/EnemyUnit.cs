@@ -3,39 +3,28 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
-public class EnemyUnit : MonoBehaviour
+namespace TurretGame
 {
-    private Health EnemyHealth;
-    public UnityEvent OnEnemyHurtEffects;
-
-    private SpriteRenderer EnemyVisuals;
-
-    // Start is called before the first frame update
-    void Start()
+    public class EnemyUnit : CharacterUnitBase
     {
-        EnemyHealth = this.GetComponent<Health>();
+        private Health EnemyHealth;
 
-        EnemyVisuals = GetComponentInChildren<SpriteRenderer>();
+        private SpriteRenderer EnemyVisuals;
 
-        //Subscribe to enemy health events
-        #region Player Health Events
-        EnemyHealth.DeathAction += OnEnemyDeath;
-        EnemyHealth.DamageAction += OnEnemyDamage;
-        #endregion
-    }
+        // Start is called before the first frame update
+        protected override void Start()
+        {
+            base.Start();
 
-    void OnEnemyDamage(float damage)
-    {
-        Debug.Log(damage);
-        OnEnemyHurtEffects.Invoke();
-    }
+            EnemyHealth = this.GetComponent<Health>();
 
-    void OnEnemyDeath()
-    {
-        //Unsubscribe all events
-        EnemyHealth.DeathAction -= OnEnemyDeath;
-        EnemyHealth.DamageAction -= OnEnemyDamage;
+            EnemyVisuals = GetComponentInChildren<SpriteRenderer>();
 
-        Destroy(gameObject);
+        }
+        protected override void OnDeath()
+        {
+            base.OnDeath();
+            Destroy(gameObject);
+        }
     }
 }

@@ -3,8 +3,23 @@ using UnityEngine;
 
 public class Health : MonoBehaviour
 {
-    [SerializeField] private float health;
-    public float maxHealth;
+    [SerializeField] private float currHealth;
+    public float CurrHealth
+    {
+        get { return currHealth; } // Read only
+        set
+        {
+            currHealth = Mathf.Clamp(currHealth, 0, maxHealth);
+            currHealth = value;
+        }
+    }
+
+    [SerializeField] private float maxHealth;
+    public float MaxHealth
+    {
+        get { return maxHealth; } // Read
+        set { maxHealth = value; }
+    }
 
     public event Action DeathAction;
 
@@ -13,16 +28,16 @@ public class Health : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        health = maxHealth;
+        currHealth = maxHealth;
     }
 
     public void Damage(float dmg)
     {
-        health -= dmg;
+        currHealth -= dmg;
 
-        if (health > 0)
+        if (currHealth > 0)
         {
-            DamageAction(health);
+            DamageAction(currHealth);
             return;
         }
         DeathAction();

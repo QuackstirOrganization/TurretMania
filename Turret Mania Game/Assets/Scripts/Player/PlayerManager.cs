@@ -9,11 +9,13 @@ namespace TurretGame
     {
         private GameObject player;
         private Health PlayerHealth;
-        private Ammo PlayerAmmo;
-        private Shoot PlayerShooting;
-        private PlayerUnit payer;
+        private PlayerUnit playerUnit;
 
-        public Text UI_playerAmmo;
+        public Text Text_playerAmmo;
+        public Image Slider_playerAmmo;
+
+        public Text Text_playerHealth;
+        public Image Slider_playerHealth;
 
         // Start is called before the first frame update
         void Start()
@@ -22,8 +24,7 @@ namespace TurretGame
 
             //Find player components
             PlayerHealth = player.GetComponent<Health>();
-            PlayerAmmo = player.GetComponent<Ammo>();
-            PlayerShooting = player.GetComponentInChildren<Shoot>();
+            playerUnit = player.GetComponent<PlayerUnit>();
 
             //Subscribe to player health events
             #region Player Health Events
@@ -33,14 +34,24 @@ namespace TurretGame
             //Subscribe to player shoot events
             //PlayerShooting.ShootAction += UpdateAmmoUI;
 
-            //Update AmmoUI
-            UpdateAmmoUI(PlayerAmmo.CurrAmmo);
+            playerUnit.AmmoUIAction += UpdateAmmoUI;
+            playerUnit.HealthUIAction += UpdateHealthUI;
+            playerUnit.UpdateAmmoUI();
+            playerUnit.UpdateHealthUI();
         }
 
-        public void UpdateAmmoUI(int Ammo)
+        public void UpdateAmmoUI(float maxAmmo, float currAmmo)
         {
-            UI_playerAmmo.text = "" + Ammo;
+            Text_playerAmmo.text = currAmmo.ToString();
+            Slider_playerAmmo.fillAmount = currAmmo / maxAmmo;
         }
+
+        public void UpdateHealthUI(float maxHealth, float currHealth)
+        {
+            Text_playerHealth.text = currHealth.ToString();
+            Slider_playerHealth.fillAmount = currHealth / maxHealth;
+        }
+
 
         void OnPlayerDeath()
         {
@@ -48,7 +59,8 @@ namespace TurretGame
 
             //Unsubscribe from all events
             PlayerHealth.DeathAction -= OnPlayerDeath;
-            //PlayerShooting.ShootAction -= UpdateAmmoUI;
+            playerUnit.AmmoUIAction -= UpdateAmmoUI;
+            playerUnit.HealthUIAction -= UpdateHealthUI;
 
 
             //reload scene

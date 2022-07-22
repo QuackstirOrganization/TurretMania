@@ -1,4 +1,4 @@
-using System.Collections;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
@@ -7,27 +7,23 @@ using Debugs;
 
 namespace TurretGame
 {
-    public class PlayerUnit : MonoBehaviour
+    public class PlayerUnit : CharacterUnitBase
     {
-        private Health PlayerHealth;
-        private Ammo PlayerAmmo;
         private Shoot PlayerShooting;
-        private Movement PlayerMovement;
         private PlayerInputManager PlayerInput;
         public TurretWeapon[] Weapons;
 
         private Vector2 moveVectorTot;
 
-        public Text UI_playerAmmo;
+        public Action<float, float> AmmoUIAction;
+        public Action<float, float> HealthUIAction;
 
-        void Start()
+        protected override void Start()
         {
+            base.Start();
 
             //Find player components
             #region Player Components
-            PlayerHealth = this.GetComponent<Health>();
-            PlayerAmmo = this.GetComponent<Ammo>();
-            PlayerMovement = this.GetComponent<Movement>();
             PlayerInput = this.GetComponent<PlayerInputManager>();
             PlayerShooting = this.GetComponentInChildren<Shoot>();
             #endregion
@@ -35,110 +31,87 @@ namespace TurretGame
             //Subscribe to player events
             #region Events
 
-            //Subscribe to player health events
-            PlayerHealth.DeathAction += OnPlayerDeath;
-            PlayerHealth.DamageAction += OnPlayerDamage;
-
             //Subscribe to player input events
             PlayerInput.ShootAction += OnPlayerShoot;
-            PlayerInput.HorizontalMoveAction += OnPlayerHorizontalMove;
-            PlayerInput.VerticalMoveAction += OnPlayerVerticalMove;
+            PlayerInput.MoveAction += OnPlayerMove;
 
             //Subscribe to player shoot events
             PlayerShooting.ShootAction += OnProjectileShot;
 
             //Subscribe to player ammo events
-            PlayerAmmo.ReloadAction += reloadingWeapon;
+            _Ammo.ReloadAction += reloadingWeapon;
 
             #endregion
             selectWeapon(0);
         }
 
-        #region Input Functions
-
-        //Shooting Function
-        #region Shooting Functions
+        //--------------------------------------------------//
+        //Shooting Functions
         void OnPlayerShoot()
         {
-            if (PlayerAmmo.CurrAmmo <= 0)
+            if (_Ammo.CurrAmmo <= 0)
             {
                 return;
             }
 
             PlayerShooting.isShoot();
 
-            if (PlayerAmmo.CurrAmmo <= 0)
+            if (_Ammo.CurrAmmo <= 0)
             {
-                PlayerAmmo.RecoilWeapon();
+                _Ammo.RecoilWeapon();
             }
         }
 
         void OnProjectileShot()
         {
-            PlayerAmmo.CurrAmmo--;
+            _Ammo.CurrAmmo--;
             UpdateAmmoUI();
         }
+        //--------------------------------------------------//
 
-        void UpdateAmmoUI()
-        {
-            UI_playerAmmo.text = "" + PlayerAmmo.CurrAmmo;
-        }
-        #endregion
-
-
-        //Movement Function
-        #region Movement Functions
+        //Movement Functions
         void OnPlayerMove()
         {
-            PlayerMovement.Move(moveVectorTot);
+            _Movement.Move(moveVectorTot);
         }
 
-        void OnPlayerHorizontalMove(float moveVector)
+        void OnPlayerMove(float moveVectorX, float moveVectorY)
         {
-            moveVectorTot.x = moveVector;
+            moveVectorTot = new Vector2(moveVectorX, moveVectorY);
             OnPlayerMove();
         }
 
-        void OnPlayerVerticalMove(float moveVector)
+        //--------------------------------------------------//
+        protected override void OnDamage(float Health)
         {
-            moveVectorTot.y = moveVector;
-            OnPlayerMove();
-        }
-        #endregion
-
-        #endregion
-
-        void OnPlayerDeath()
-        {
-            GlobalDebugs.DebugPM(this, "Is Dead");
+            base.OnDamage(Health);
+            UpdateHealthUI();
+            GlobalDebugs.DebugPM(this, "Health: " + Health);
         }
 
-        private void OnDestroy()
+        protected override void OnDestroy()
         {
-            //Unsubscribe from all events
-            PlayerHealth.DeathAction -= OnPlayerDeath;
-            PlayerHealth.DamageAction -= OnPlayerDamage;
+            base.OnDestroy();
 
             //Subscribe to player input events
             PlayerInput.ShootAction -= OnPlayerShoot;
-            PlayerInput.HorizontalMoveAction -= OnPlayerHorizontalMove;
-            PlayerInput.VerticalMoveAction -= OnPlayerVerticalMove;
+            PlayerInput.MoveAction -= OnPlayerMove;
 
             //Subscribe to player shoot events
             PlayerShooting.ShootAction -= OnProjectileShot;
 
             //Subscribe to player ammo events
-            PlayerAmmo.ReloadAction -= reloadingWeapon;
+            _Ammo.ReloadAction -= reloadingWeapon;
         }
+        //--------------------------------------------------//
 
-        void OnPlayerDamage(float Health)
-        {
-            GlobalDebugs.DebugPM(this, "Health: " + Health);
-        }
 
+
+
+        //--------------------------------------------------//
         void reloadingWeapon()
         {
-            selectWeapon(Random.Range(0, Weapons.Length));
+            selectWeapon(UnityEngine.Random.Range(0, Weapons.Length));
             Invoke("UpdateAmmoUI", 0.1f);
         }
 
@@ -147,7 +120,22 @@ namespace TurretGame
             PlayerShooting.ProjectileSpeed = Weapons[indexWant].projectileSpeed;
             PlayerShooting.damage = Weapons[indexWant].damage;
             PlayerShooting.fireRate = Weapons[indexWant].fireRate;
-            PlayerAmmo.MaxAmmo = Weapons[indexWant].ammo;
+            _Ammo.MaxAmmo = Weapons[indexWant].ammo;
         }
+        //--------------------------------------------------//
+
+
+
+
+        //--------------------------------------------------//
+        public void UpdateHealthUI()
+        {
+            HealthUIAction(_Health.MaxHealth, _Health.CurrHealth);
+        }
+        public void UpdateAmmoUI()
+        {
+            AmmoUIAction(_Ammo.MaxAmmo, _Ammo.CurrAmmo);
+        }
+        //--------------------------------------------------//
     }
 }
