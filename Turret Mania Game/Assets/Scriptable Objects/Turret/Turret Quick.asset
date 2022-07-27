@@ -12,6 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 86393531cc7dc164ba87b2e584b2d25d, type: 3}
   m_Name: Turret Quick
   m_EditorClassIdentifier: 
-  Health: 5
-  Ammo: 20
-  ProjectileSpeed: 30
+  Health: 20
+  movementSpeed: 7

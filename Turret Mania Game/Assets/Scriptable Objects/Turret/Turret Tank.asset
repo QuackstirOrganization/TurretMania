@@ -12,6 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 86393531cc7dc164ba87b2e584b2d25d, type: 3}
   m_Name: Turret Tank
   m_EditorClassIdentifier: 
-  Health: 20
-  Ammo: 10
-  ProjectileSpeed: 5
+  Health: 50
+  movementSpeed: 5

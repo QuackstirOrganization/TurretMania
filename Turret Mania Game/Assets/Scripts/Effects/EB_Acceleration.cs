@@ -4,28 +4,28 @@ using UnityEngine;
 
 namespace TurretGame
 {
-    public class EB_SlowDown : EffectBase
+    public class EB_Acceleration : EffectBase
     {
-        [SerializeField] float newSpeed;
-        private float initialSpeed;
+        [SerializeField] float newAcceleration;
+        private float initialAcceleration;
 
         public override void GetCharacterUnit(CharacterUnitBase characterUnit)
         {
             base.GetCharacterUnit(characterUnit);
-            initialSpeed = _characterUnit._movement.Speed;
+            initialAcceleration = characterUnit._movement.Acceleration;
         }
 
         public override void EffectActivation()
         {
             base.EffectActivation();
 
-            _characterUnit._movement.Speed = newSpeed;
+            _characterUnit._movement.Acceleration = newAcceleration;
         }
 
         public override void RemoveEffect()
         {
             base.RemoveEffect();
-            _characterUnit._movement.Speed = _characterUnit.initalSpeed;
+            _characterUnit._movement.Acceleration = _characterUnit.initalAcceleration;
         }
     }
 }

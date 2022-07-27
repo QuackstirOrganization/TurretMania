@@ -22,7 +22,7 @@ namespace TurretGame
         //Increase movement speed
         public virtual void EffectActivation()
         {
-            Debug.Log("Activating Effect");
+            GlobalDebugs.DebugPM(this, "Activating Effect");
         }
 
         public virtual void RemoveEffect()

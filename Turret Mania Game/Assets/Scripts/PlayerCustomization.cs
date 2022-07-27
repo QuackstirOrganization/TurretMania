@@ -32,10 +32,9 @@ namespace TurretGame
         void InitializeStats()
         {
             GameObject Player;
-            Health PlayerHealth;
-            Ammo PlayerAmmo;
+
+            CharacterUnitBase PlayerCharacterUnit;
             Shoot PlayerShooting;
-            Movement PlayerMovement;
 
             if (GameObject.FindGameObjectWithTag("Player") == null)
             {
@@ -44,15 +43,15 @@ namespace TurretGame
 
             Player = GameObject.FindGameObjectWithTag("Player");
 
-            PlayerHealth = Player.GetComponent<Health>();
-            PlayerAmmo = Player.GetComponent<Ammo>();
-            PlayerMovement = Player.GetComponent<Movement>();
+            PlayerCharacterUnit = Player.GetComponent<CharacterUnitBase>();
+
+
             PlayerShooting = Player.GetComponentInChildren<Shoot>();
 
             if (TurretType != null)
             {
-                PlayerHealth.MaxHealth = TurretType.Health;
-                PlayerMovement.Speed = TurretType.movementSpeed;
+                PlayerCharacterUnit.initialHealth = TurretType.Health;
+                PlayerCharacterUnit.initalSpeed = TurretType.movementSpeed;
             }
 
             if (TurretWeapons != null)

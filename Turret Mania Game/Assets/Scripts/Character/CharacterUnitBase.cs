@@ -8,6 +8,8 @@ namespace TurretGame
 {
     public class CharacterUnitBase : MonoBehaviour
     {
+        public Turret turretType;
+
         //References
         #region Health
         protected Health _Health;
@@ -24,10 +26,77 @@ namespace TurretGame
         public Movement _movement { get { return _Movement; } }
         #endregion
 
+        #region RigidBody2D
+        protected Rigidbody2D _Rb2D;
+        public Rigidbody2D _rb2D { get { return _Rb2D; } }
+        #endregion
+
+        //-----Health-----//
+        [Header("Health Variables")]
+        [SerializeField] protected float InitialHealth;
+        public float initialHealth
+        {
+            get { return InitialHealth; }
+            set { InitialHealth = value; }
+        }
+
+        [SerializeField] protected float ModifiedHealth;
+        public float modifiedHealth
+        {
+            get { return ModifiedHealth; }
+            set { ModifiedHealth = value; }
+        }
+
+
+
+        //-----Ammo-----//
+        [Header("Ammo Variables")]
+        [SerializeField] protected int InitialAmmo;
+        public int initialAmmo
+        {
+            get { return InitialAmmo; }
+            set { InitialAmmo = value; }
+        }
+
+        [SerializeField] protected int ModifiedAmmo;
+        public int modifiedAmmo
+        {
+            get { return ModifiedAmmo; }
+            set { ModifiedAmmo = value; }
+        }
+
+
+        //-----Movement-----//
         [Header("Movement Variables")]
-        [SerializeField] protected float baseSpeed;
-        [SerializeField] protected float currSpeed;
-        [SerializeField] protected float modifiedSpeed;
+        [SerializeField] protected float InitalSpeed;
+        public float initalSpeed
+        {
+            get { return InitalSpeed; }
+            set { InitalSpeed = value; }
+        }
+
+        [SerializeField] protected float ModifiedSpeed;
+        public float modifiedSpeed
+        {
+            get { return ModifiedSpeed; }
+            set { ModifiedSpeed = value; }
+        }
+
+        [Space(5)]
+        [SerializeField] protected float InitalAcceleration;
+        public float initalAcceleration
+        {
+            get { return InitalAcceleration; }
+            set { InitalAcceleration = value; }
+        }
+
+        [SerializeField] protected float ModifiedAcceleration;
+        public float modifiedAcceleration
+        {
+            get { return ModifiedAcceleration; }
+            set { ModifiedAcceleration = value; }
+        }
+
 
         [Header("Unity Events")]
         [SerializeField]
@@ -41,6 +110,33 @@ namespace TurretGame
         {
             InitializeComponents();
             SubscribeEvents();
+
+            if (turretType != null)
+            {
+                initialHealth = turretType.Health;
+                initalSpeed = turretType.movementSpeed;
+            }
+            InitializeVariables();
+        }
+
+        protected virtual void InitializeVariables()
+        {
+            if (_Health != null)
+            {
+                _Health.MaxHealth = InitialHealth;
+            }
+
+            if (_Ammo != null)
+            {
+                _Ammo.CurrAmmo = initialAmmo;
+            }
+
+            if (_Movement != null)
+            {
+                _Movement.Speed = initalSpeed;
+                _Movement.Acceleration = initalAcceleration;
+            }
+
         }
 
         protected virtual void InitializeComponents()
@@ -59,6 +155,11 @@ namespace TurretGame
                 _Movement = this.GetComponent<Movement>();
             else
                 GlobalDebugs.DebugPM(this, "No Movement Component");
+
+            if (this.GetComponent<Rigidbody2D>() != null)
+                _Rb2D = this.GetComponent<Rigidbody2D>();
+            else
+                GlobalDebugs.DebugPM(this, "No Rigidbody2D Component");
         }
 
         protected virtual void SubscribeEvents()

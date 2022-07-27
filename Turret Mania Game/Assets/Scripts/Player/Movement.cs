@@ -6,9 +6,8 @@ public class Movement : MonoBehaviour
 {
     private Rigidbody2D Rb2D;
     public float Speed;
-    public Transform eye;
+    public float Acceleration;
 
-    private Vector2 MoveVector;
     // Start is called before the first frame update
     void Start()
     {
@@ -17,19 +16,8 @@ public class Movement : MonoBehaviour
 
     public void Move(Vector2 newMoveVector)
     {
-        if (newMoveVector != null)
-        {
-            MoveVector = newMoveVector;
+        //Rb2D.velocity = newMoveVector * Speed;
 
-        }
-    }
-
-    private void FixedUpdate()
-    {
-        Vector2 MovementVector = MoveVector;
-
-        Rb2D.velocity = MovementVector * Speed;
-
-        eye.localPosition = MovementVector * 0.3f;
+        Rb2D.velocity = Vector2.Lerp(Rb2D.velocity, newMoveVector * Speed, Acceleration);
     }
 }

@@ -43,6 +43,9 @@ namespace TurretGame
 
             #endregion
             selectWeapon(0);
+
+            UpdateAmmoUI();
+            UpdateHealthUI();
         }
 
         //--------------------------------------------------//
@@ -133,6 +136,7 @@ namespace TurretGame
             if (HealthUIAction != null)
                 HealthUIAction(_Health.MaxHealth, _Health.CurrHealth);
         }
+
         public void UpdateAmmoUI()
         {
             if (AmmoUIAction != null)
