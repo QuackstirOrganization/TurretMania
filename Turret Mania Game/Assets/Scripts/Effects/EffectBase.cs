@@ -1,25 +1,31 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Debugs;
 
 namespace TurretGame
 {
     public class EffectBase : MonoBehaviour
     {
         protected CharacterUnitBase _characterUnit;
-        // Start is called before the first frame update
-        protected virtual void Start()
-        {
-            InitializeEffect();
-        }
 
         public virtual void InitializeEffect()
         {
-            _characterUnit = this.GetComponent<CharacterUnitBase>();
+
+        }
+
+        public virtual void GetCharacterUnit(CharacterUnitBase characterUnit)
+        {
+            _characterUnit = characterUnit;
         }
 
         //Increase movement speed
         public virtual void EffectActivation()
+        {
+            Debug.Log("Activating Effect");
+        }
+
+        public virtual void RemoveEffect()
         {
 
         }

@@ -131,7 +131,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 35e0ac1bcea41c648b0441c18ee79481, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  health: 0
+  currHealth: 0
   maxHealth: 10
 --- !u!114 &-4921755334114599017
 MonoBehaviour:
@@ -145,6 +145,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 552472514d15a7b42877b9c21ce12481, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _Health: {fileID: 0}
+  _Ammo: {fileID: 0}
+  _Movement: {fileID: 0}
   OnDamagedEvents:
     m_PersistentCalls:
       m_Calls:
@@ -175,33 +178,6 @@ MonoBehaviour:
   OnDeathEvents:
     m_PersistentCalls:
       m_Calls: []
-  OnEnemyHurtEffects:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 2198315743130403225}
-        m_TargetAssemblyTypeName: TurretGame.Gamefeel, Assembly-CSharp
-        m_MethodName: ObjectFlash
-        m_Mode: 4
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0.25
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-      - m_Target: {fileID: 2198315743130403225}
-        m_TargetAssemblyTypeName: TurretGame.Gamefeel, Assembly-CSharp
-        m_MethodName: enableParticles
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
 --- !u!114 &2198315743130403225
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5110,8 +5086,8 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
+  m_SortingLayerID: -1720050965
+  m_SortingLayer: 3
   m_SortingOrder: 0
   m_Sprite: {fileID: -7136845739318628345, guid: d85300bb1e232354594982a7811bafbc, type: 3}
   m_Color: {r: 1, g: 0, b: 0, a: 1}

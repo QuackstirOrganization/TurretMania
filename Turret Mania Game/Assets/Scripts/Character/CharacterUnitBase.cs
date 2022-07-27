@@ -8,9 +8,26 @@ namespace TurretGame
 {
     public class CharacterUnitBase : MonoBehaviour
     {
+        //References
+        #region Health
         protected Health _Health;
+        public Health _health { get { return _Health; } }
+        #endregion
+
+        #region Ammo
         protected Ammo _Ammo;
+        public Ammo _ammo { get { return _Ammo; } }
+        #endregion
+
+        #region Movement
         protected Movement _Movement;
+        public Movement _movement { get { return _Movement; } }
+        #endregion
+
+        [Header("Movement Variables")]
+        [SerializeField] protected float baseSpeed;
+        [SerializeField] protected float currSpeed;
+        [SerializeField] protected float modifiedSpeed;
 
         [Header("Unity Events")]
         [SerializeField]

@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Debugs
 {
-    public class GlobalDebugs
+    public static class GlobalDebugs
     {
         public static void DebugPM(Object DebugObject, string Message)
         {

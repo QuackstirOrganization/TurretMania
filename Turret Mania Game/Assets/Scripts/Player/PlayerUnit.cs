@@ -130,11 +130,13 @@ namespace TurretGame
         //--------------------------------------------------//
         public void UpdateHealthUI()
         {
-            HealthUIAction(_Health.MaxHealth, _Health.CurrHealth);
+            if (HealthUIAction != null)
+                HealthUIAction(_Health.MaxHealth, _Health.CurrHealth);
         }
         public void UpdateAmmoUI()
         {
-            AmmoUIAction(_Ammo.MaxAmmo, _Ammo.CurrAmmo);
+            if (AmmoUIAction != null)
+                AmmoUIAction(_Ammo.MaxAmmo, _Ammo.CurrAmmo);
         }
         //--------------------------------------------------//
     }
