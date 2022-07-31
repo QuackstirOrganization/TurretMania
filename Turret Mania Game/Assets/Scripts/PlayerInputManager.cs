@@ -14,6 +14,8 @@ namespace TurretGame
 
         #region Events
         public event Action ShootAction;
+        public event Action ShootActionDown;
+        public event Action ShootActionUp;
         public event Action<float, float> MoveAction;
         #endregion
 
@@ -23,7 +25,16 @@ namespace TurretGame
             MoveAction(Input.GetAxisRaw(HorizontalMoveInput),
                 Input.GetAxisRaw(VerticalMoveInput));
 
-            if (Input.GetButton(ShootInput))
+            
+            if (Input.GetButtonDown(ShootInput) && ShootActionDown != null)
+            {
+                ShootActionDown();
+            }
+            else if (Input.GetButtonUp(ShootInput) && ShootActionUp != null)
+            {
+                ShootActionUp();
+            }
+            else if (Input.GetButton(ShootInput) && ShootAction != null)
             {
                 ShootAction();
             }

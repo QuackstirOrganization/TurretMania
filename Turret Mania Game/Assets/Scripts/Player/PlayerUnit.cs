@@ -33,6 +33,7 @@ namespace TurretGame
 
             //Subscribe to player input events
             PlayerInput.ShootAction += OnPlayerShoot;
+            PlayerInput.ShootActionDown += OnPlayerShootDown;
             PlayerInput.MoveAction += OnPlayerMove;
 
             //Subscribe to player shoot events
@@ -52,13 +53,14 @@ namespace TurretGame
         //Shooting Functions
         void OnPlayerShoot()
         {
-            if (_Ammo.CurrAmmo <= 0)
+            if (_Ammo.CurrAmmo > 0)
             {
-                return;
+                PlayerShooting.isShoot();
             }
+        }
 
-            PlayerShooting.isShoot();
-
+        void OnPlayerShootDown()
+        {
             if (_Ammo.CurrAmmo <= 0)
             {
                 _Ammo.RecoilWeapon();

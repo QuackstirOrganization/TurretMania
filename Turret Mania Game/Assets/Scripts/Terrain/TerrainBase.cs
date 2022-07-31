@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Debugs;
 
 namespace TurretGame
 {
@@ -24,7 +25,8 @@ namespace TurretGame
 
         private void OnTriggerEnter2D(Collider2D collision)
         {
-            if (collision.gameObject.CompareTag(terrainEffect))
+
+            if (collision.gameObject.tag != null && collision.gameObject.CompareTag(terrainEffect))
             {
                 foreach (EffectBase effect in _effects)
                 {
@@ -42,6 +44,10 @@ namespace TurretGame
                 {
                     effect.RemoveEffect();
                 }
+            }
+            else
+            {
+                GlobalDebugs.DebugPM(this, " collided with this " + collision.gameObject.tag);
             }
         }
     }

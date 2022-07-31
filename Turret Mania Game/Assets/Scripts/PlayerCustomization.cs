@@ -48,11 +48,11 @@ namespace TurretGame
 
             PlayerShooting = Player.GetComponentInChildren<Shoot>();
 
-            if (TurretType != null)
-            {
-                PlayerCharacterUnit.initialHealth = TurretType.Health;
-                PlayerCharacterUnit.initalSpeed = TurretType.movementSpeed;
-            }
+            //if (TurretType != null)
+            //{
+            //    PlayerCharacterUnit.initialHealth = TurretType.Health;
+            //    PlayerCharacterUnit.initalSpeed = TurretType.movementSpeed;
+            //}
 
             if (TurretWeapons != null)
             {

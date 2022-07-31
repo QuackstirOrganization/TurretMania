@@ -16,7 +16,7 @@ GameObject:
   - component: {fileID: -4372197283864393624}
   - component: {fileID: -4921755334114599017}
   - component: {fileID: 2198315743130403225}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Enemy
   m_TagString: Enemy
   m_Icon: {fileID: 0}
@@ -119,6 +119,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Damage: 5
   Opponent: Player
+  canDestroy: 1
 --- !u!114 &-4372197283864393624
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -145,9 +146,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 552472514d15a7b42877b9c21ce12481, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _Health: {fileID: 0}
-  _Ammo: {fileID: 0}
-  _Movement: {fileID: 0}
+  turretType: {fileID: 0}
+  InitialHealth: 0
+  ModifiedHealth: 0
+  InitialAmmo: 0
+  ModifiedAmmo: 0
+  InitalSpeed: 0
+  ModifiedSpeed: 0
+  InitalAcceleration: 0
+  ModifiedAcceleration: 0
   OnDamagedEvents:
     m_PersistentCalls:
       m_Calls:

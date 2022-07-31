@@ -8,6 +8,7 @@ public class Ammo : MonoBehaviour
 
     public float GunRecoilSpeed;
     public bool canPickUp = false;
+    public bool GunExist = false;
 
     [Header("Mouse Rotation")]
     public Vector3 angle;
@@ -41,11 +42,17 @@ public class Ammo : MonoBehaviour
 
     public void RecoilWeapon()
     {
+        if (GunExist)
+        {
+            return;
+        }
+        GunExist = true;
+
         AS.PlayOneShot(GunLossSFX);
         angle = (this.transform.position - mousePos.position);
 
         GameObject GunFlung = Instantiate(GunProjectile, transform.position, Quaternion.identity);
-        GunFlung.GetComponent<Rigidbody2D>().velocity = new Vector3(Rb2D.velocity.x, Rb2D.velocity.y, 0) + Turret.transform.up * GunRecoilSpeed;
+        GunFlung.GetComponent<Rigidbody2D>().velocity = new Vector3(Rb2D.velocity.x, Rb2D.velocity.y, 0) + -Turret.transform.up * GunRecoilSpeed;
         GunFlung.transform.rotation = Turret.transform.rotation;
 
         TurretSprite.enabled = false;
@@ -74,6 +81,7 @@ public class Ammo : MonoBehaviour
             AS.PlayOneShot(ReloadSFX);
             Destroy(collision.gameObject);
             CurrAmmo = MaxAmmo;
+            GunExist = false;
         }
     }
 

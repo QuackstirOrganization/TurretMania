@@ -5,7 +5,7 @@ using Debugs;
 
 namespace TurretGame
 {
-    public class EffectBase : MonoBehaviour
+    public abstract class EffectBase : MonoBehaviour
     {
         protected CharacterUnitBase _characterUnit;
 

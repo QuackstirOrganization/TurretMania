@@ -6,30 +6,13 @@ using Debugs;
 
 namespace TurretGame
 {
-    public class CharacterUnitBase : MonoBehaviour
+    public abstract class CharacterUnitBase : MonoBehaviour
     {
         public Turret turretType;
 
-        //References
         #region Health
         protected Health _Health;
         public Health _health { get { return _Health; } }
-        #endregion
-
-        #region Ammo
-        protected Ammo _Ammo;
-        public Ammo _ammo { get { return _Ammo; } }
-        #endregion
-
-        #region Movement
-        protected Movement _Movement;
-        public Movement _movement { get { return _Movement; } }
-        #endregion
-
-        #region RigidBody2D
-        protected Rigidbody2D _Rb2D;
-        public Rigidbody2D _rb2D { get { return _Rb2D; } }
-        #endregion
 
         //-----Health-----//
         [Header("Health Variables")]
@@ -37,17 +20,24 @@ namespace TurretGame
         public float initialHealth
         {
             get { return InitialHealth; }
-            set { InitialHealth = value; }
         }
 
-        [SerializeField] protected float ModifiedHealth;
+        protected float ModifiedHealth;
         public float modifiedHealth
         {
             get { return ModifiedHealth; }
-            set { ModifiedHealth = value; }
+            set
+            {
+                ModifiedHealth = value;
+                _Health.CurrHealth = value;
+                GlobalDebugs.DebugPM(this, "Health is now" + value);
+            }
         }
+        #endregion
 
-
+        #region Ammo
+        protected Ammo _Ammo;
+        public Ammo _ammo { get { return _Ammo; } }
 
         //-----Ammo-----//
         [Header("Ammo Variables")]
@@ -55,16 +45,25 @@ namespace TurretGame
         public int initialAmmo
         {
             get { return InitialAmmo; }
-            set { InitialAmmo = value; }
         }
 
-        [SerializeField] protected int ModifiedAmmo;
+        protected int ModifiedAmmo;
         public int modifiedAmmo
         {
             get { return ModifiedAmmo; }
-            set { ModifiedAmmo = value; }
+            set
+            {
+                ModifiedAmmo = value;
+                if (_Ammo != null)
+                    _Ammo.CurrAmmo = ModifiedAmmo;
+                GlobalDebugs.DebugPM(this, "Ammo is now " + value);
+            }
         }
+        #endregion
 
+        #region Movement
+        protected Movement _Movement;
+        public Movement _movement { get { return _Movement; } }
 
         //-----Movement-----//
         [Header("Movement Variables")]
@@ -72,14 +71,19 @@ namespace TurretGame
         public float initalSpeed
         {
             get { return InitalSpeed; }
-            set { InitalSpeed = value; }
         }
 
-        [SerializeField] protected float ModifiedSpeed;
+        protected float ModifiedSpeed;
         public float modifiedSpeed
         {
             get { return ModifiedSpeed; }
-            set { ModifiedSpeed = value; }
+            set
+            {
+                ModifiedSpeed = value;
+                if (_Movement != null)
+                    _Movement.Speed = value;
+                GlobalDebugs.DebugPM(this, "Movement speed is now " + value);
+            }
         }
 
         [Space(5)]
@@ -87,16 +91,27 @@ namespace TurretGame
         public float initalAcceleration
         {
             get { return InitalAcceleration; }
-            set { InitalAcceleration = value; }
         }
 
-        [SerializeField] protected float ModifiedAcceleration;
+        protected float ModifiedAcceleration;
         public float modifiedAcceleration
         {
             get { return ModifiedAcceleration; }
-            set { ModifiedAcceleration = value; }
+            set
+            {
+                ModifiedAcceleration = value;
+                if (_Movement != null)
+                    _Movement.Acceleration = value;
+                GlobalDebugs.DebugPM(this, "Movement acceleration is now " + value);
+            }
         }
 
+        #endregion
+
+        #region RigidBody2D
+        protected Rigidbody2D _Rb2D;
+        public Rigidbody2D _rb2D { get { return _Rb2D; } }
+        #endregion
 
         [Header("Unity Events")]
         [SerializeField]
@@ -104,6 +119,15 @@ namespace TurretGame
 
         [SerializeField]
         private UnityEvent OnDeathEvents;
+
+        private void Update()
+        {
+            if (Input.GetKeyDown(KeyCode.P))
+            {
+                gameObject.AddComponent<IB_MoveSpeedIncrease>();
+            }
+        }
+
 
         // Start is called before the first frame update
         protected virtual void Start()
@@ -113,8 +137,8 @@ namespace TurretGame
 
             if (turretType != null)
             {
-                initialHealth = turretType.Health;
-                initalSpeed = turretType.movementSpeed;
+                InitialHealth = turretType.Health;
+                InitalSpeed = turretType.movementSpeed;
             }
             InitializeVariables();
         }
@@ -124,19 +148,23 @@ namespace TurretGame
             if (_Health != null)
             {
                 _Health.MaxHealth = InitialHealth;
+                ModifiedHealth = InitialHealth;
             }
 
             if (_Ammo != null)
             {
-                _Ammo.CurrAmmo = initialAmmo;
+                _Ammo.CurrAmmo = InitialAmmo;
+                modifiedAmmo = InitialAmmo;
             }
 
             if (_Movement != null)
             {
-                _Movement.Speed = initalSpeed;
-                _Movement.Acceleration = initalAcceleration;
-            }
+                _Movement.Speed = InitalSpeed;
+                _Movement.Acceleration = InitalAcceleration;
 
+                ModifiedSpeed = InitalSpeed;
+                ModifiedAcceleration = InitalAcceleration;
+            }
         }
 
         protected virtual void InitializeComponents()
@@ -169,7 +197,6 @@ namespace TurretGame
                 _Health.DeathAction += OnDeath;
                 _Health.DamageAction += OnDamage;
             }
-
         }
 
         protected virtual void OnDestroy()
@@ -179,7 +206,6 @@ namespace TurretGame
                 _Health.DeathAction -= OnDeath;
                 _Health.DamageAction -= OnDamage;
             }
-
             GlobalDebugs.DebugPM(this, "Is Dead");
         }
 
@@ -191,6 +217,11 @@ namespace TurretGame
         protected virtual void OnDeath()
         {
             OnDeathEvents.Invoke();
+        }
+
+        public void AddMod(int AmtAdd, ItemScriptableObject Item)
+        {
+
         }
     }
 }

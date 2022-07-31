@@ -186,7 +186,7 @@ GameObject:
   - component: {fileID: 5102982184546042391}
   - component: {fileID: 5183445163952740427}
   - component: {fileID: 861093946782647323}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Player
   m_TagString: Player
   m_Icon: {fileID: 0}
@@ -440,6 +440,7 @@ MonoBehaviour:
   MaxAmmo: 5
   GunRecoilSpeed: 5
   canPickUp: 0
+  GunExist: 0
   angle: {x: 0, y: 0, z: 0}
   GunLossSFX: {fileID: 8300000, guid: bf085535cf50c4744bacb5c6fc33fb55, type: 3}
   ReloadSFX: {fileID: 8300000, guid: 6496419a1b208fd42a1d1e73189f8ded, type: 3}
