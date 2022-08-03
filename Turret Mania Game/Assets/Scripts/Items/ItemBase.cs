@@ -20,7 +20,11 @@ namespace TurretGame
     {
         protected CharacterUnitBase _characterUnit;
         [SerializeField] protected int StackAmount = 1;
+
+        [SerializeField] protected SlopeType slopeType;
+        [SerializeField] protected float initialVal;
         [SerializeField] protected float SlopeIncrease = 0.5f;
+        [SerializeField] protected bool increasePercent = true;
         protected Rarity rarity;
 
         public virtual void GetCharacterUnit(CharacterUnitBase characterUnit)
@@ -40,9 +44,15 @@ namespace TurretGame
 
         }
 
+        protected virtual void RemoveEffects()
+        {
+
+        }
+
         public virtual void IncreaseStackAmt(int IncreaseBy)
         {
             StackAmount += IncreaseBy;
+            UpdateItem(slopeType, initialVal, SlopeIncrease, increasePercent);
         }
 
         protected virtual void UpdateItem(SlopeType SlopeWant, float initialValue, float increaseRate, bool IncreasePercentage)

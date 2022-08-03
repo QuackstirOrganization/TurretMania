@@ -25,7 +25,7 @@ namespace TurretGame
         public override void RemoveEffect()
         {
             base.RemoveEffect();
-            _characterUnit._movement.Speed = _characterUnit.initalSpeed;
+            _characterUnit._movement.Speed = _characterUnit.modifiedSpeed;
         }
     }
 }

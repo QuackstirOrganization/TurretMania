@@ -2,12 +2,16 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.UI;
 using Debugs;
 
 namespace TurretGame
 {
     public abstract class CharacterUnitBase : MonoBehaviour
     {
+        public Text speed;
+        public Image speedslider;
+
         public Turret turretType;
 
         #region Health
@@ -124,7 +128,19 @@ namespace TurretGame
         {
             if (Input.GetKeyDown(KeyCode.P))
             {
+                gameObject.AddComponent<IB_MoveSpeedNotShoot>();
+            }
+
+            if (Input.GetKeyDown(KeyCode.O))
+            {
                 gameObject.AddComponent<IB_MoveSpeedIncrease>();
+
+            }
+
+            if (speed != null)
+            {
+                speed.text = _Rb2D.velocity.magnitude.ToString("F1");
+                speedslider.fillAmount = Mathf.Lerp(speedslider.fillAmount, _Rb2D.velocity.magnitude / 100, Time.deltaTime);
             }
         }
 

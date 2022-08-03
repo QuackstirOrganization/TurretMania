@@ -12,7 +12,6 @@ namespace TurretGame
         protected override void Start()
         {
             base.Start();
-            StackAmount = 10;
             initialSpeed = _characterUnit.initalSpeed;
             ProcEffects();
         }
