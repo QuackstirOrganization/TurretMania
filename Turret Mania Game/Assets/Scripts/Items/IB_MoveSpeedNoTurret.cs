@@ -35,20 +35,19 @@ namespace TurretGame
         {
             base.ProcEffects();
 
-            _characterUnit._movement.Speed = _characterUnit.baseSpeed + (currentMultiplier - _characterUnit.initalSpeed);
+            _characterUnit.modifiedSpeed += currentMultiplier;
         }
 
         protected override void RemoveEffects()
         {
             base.RemoveEffects();
 
-            _characterUnit._movement.Speed = _characterUnit.baseSpeed;
+            _characterUnit.modifiedSpeed -= currentMultiplier;
         }
 
         protected override void UpdateEffects()
         {
             updateMultipler(slopeType, _characterUnit.initalSpeed, SlopeIncrease, increasePercent);
-            RemoveEffects();
         }
 
     }

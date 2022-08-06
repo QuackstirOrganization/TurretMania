@@ -84,15 +84,15 @@ namespace TurretGame
             get { return InitialSpeed; }
         }
 
-        [SerializeField] protected float BaseSpeed;
-        public float baseSpeed
-        {
-            get { return BaseSpeed; }
-            set
-            {
-                BaseSpeed = value;
-            }
-        }
+        //[SerializeField] protected float BaseSpeed;
+        //public float baseSpeed
+        //{
+        //    get { return BaseSpeed; }
+        //    set
+        //    {
+        //        BaseSpeed = value;
+        //    }
+        //}
 
         protected float ModifiedSpeed;
         public float modifiedSpeed
@@ -160,7 +160,7 @@ namespace TurretGame
 
             if (speed != null)
             {
-                speed.text = _Rb2D.velocity.magnitude.ToString("F1");
+                speed.text = _Rb2D.velocity.magnitude.ToString("F2");
                 speedslider.fillAmount = Mathf.Lerp(speedslider.fillAmount, _Rb2D.velocity.magnitude / 100, Time.deltaTime);
             }
         }
@@ -198,7 +198,6 @@ namespace TurretGame
             {
                 _Movement.Speed = InitialSpeed;
                 _Movement.Acceleration = InitalAcceleration;
-                baseSpeed = InitialSpeed;
 
                 ModifiedSpeed = InitialSpeed;
                 ModifiedAcceleration = InitalAcceleration;

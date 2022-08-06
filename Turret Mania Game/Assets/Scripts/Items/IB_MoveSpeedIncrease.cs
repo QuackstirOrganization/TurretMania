@@ -17,14 +17,14 @@ namespace TurretGame
         {
             base.ProcEffects();
 
-            _characterUnit.modifiedSpeed = currentMultiplier;
-            _characterUnit.baseSpeed = currentMultiplier;
+            _characterUnit.modifiedSpeed += currentMultiplier;
         }
 
         protected override void UpdateEffects()
         {
-            ProcEffects();
+            _characterUnit.modifiedSpeed -= currentMultiplier;
             updateMultipler(slopeType, _characterUnit.initalSpeed, SlopeIncrease, increasePercent);
+            ProcEffects();
         }
     }
 }

@@ -100,7 +100,7 @@ namespace TurretGame
 
         protected virtual float linearSlope(float initalValue, float increaseRate)
         {
-            return initalValue + increaseRate * StackAmount;
+            return initalValue * increaseRate * StackAmount;
         }
 
         protected virtual float exponentialSlope(float initalValue, float increaseRate)

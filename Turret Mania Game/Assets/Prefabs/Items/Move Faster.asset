@@ -16,5 +16,5 @@ MonoBehaviour:
   ItemPrefab: {fileID: 6212088398191150146, guid: 926a257b327530f4ea970e9935b7a59e, type: 3}
   slopeType: 0
   initialVal: 5
-  SlopeIncrease: 5
+  SlopeIncrease: 1.5
   increasePercent: 1
