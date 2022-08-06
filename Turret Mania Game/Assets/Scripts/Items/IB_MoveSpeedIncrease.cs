@@ -6,13 +6,10 @@ namespace TurretGame
 {
     public class IB_MoveSpeedIncrease : ItemBase
     {
-        private float initialSpeed;
-
         // Start is called before the first frame update
         protected override void Start()
         {
             base.Start();
-            initialSpeed = _characterUnit.initalSpeed;
             ProcEffects();
         }
 
@@ -20,13 +17,14 @@ namespace TurretGame
         {
             base.ProcEffects();
 
-            _characterUnit.modifiedSpeed = _characterUnit.modifiedSpeed + increase();
+            _characterUnit.modifiedSpeed = currentMultiplier;
+            _characterUnit.baseSpeed = currentMultiplier;
         }
 
-        float increase()
+        protected override void UpdateEffects()
         {
-            return initialSpeed * SlopeIncrease * StackAmount;
+            ProcEffects();
+            updateMultipler(slopeType, _characterUnit.initalSpeed, SlopeIncrease, increasePercent);
         }
-
     }
 }

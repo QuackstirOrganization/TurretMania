@@ -44,5 +44,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 98443398d0098fd4683c24353edfd0b8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Stacks: 0
+  StackAmount: 1
+  slopeType: 0
+  initialVal: 0
   SlopeIncrease: 5
+  increasePercent: 1
+  _scriptableObject: {fileID: 11400000, guid: db9dcab7eddd5bb4fb793e028634b406, type: 2}

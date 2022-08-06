@@ -14,6 +14,13 @@ namespace TurretGame
 
         public Turret turretType;
 
+        public ItemScriptableObject item;
+        public ItemScriptableObject item1;
+
+        public bool thing = false;
+
+        protected Dictionary<string, ItemBase> ItemsDictionary = new Dictionary<string, ItemBase>();
+
         #region Health
         protected Health _Health;
         public Health _health { get { return _Health; } }
@@ -71,10 +78,20 @@ namespace TurretGame
 
         //-----Movement-----//
         [Header("Movement Variables")]
-        [SerializeField] protected float InitalSpeed;
+        [SerializeField] protected float InitialSpeed;
         public float initalSpeed
         {
-            get { return InitalSpeed; }
+            get { return InitialSpeed; }
+        }
+
+        [SerializeField] protected float BaseSpeed;
+        public float baseSpeed
+        {
+            get { return BaseSpeed; }
+            set
+            {
+                BaseSpeed = value;
+            }
         }
 
         protected float ModifiedSpeed;
@@ -126,15 +143,19 @@ namespace TurretGame
 
         private void Update()
         {
+            if (!thing)
+            {
+                return;
+            }
+
             if (Input.GetKeyDown(KeyCode.P))
             {
-                gameObject.AddComponent<IB_MoveSpeedNotShoot>();
+                AddMod(1, item);
             }
 
             if (Input.GetKeyDown(KeyCode.O))
             {
-                gameObject.AddComponent<IB_MoveSpeedIncrease>();
-
+                AddMod(1, item1);
             }
 
             if (speed != null)
@@ -154,7 +175,7 @@ namespace TurretGame
             if (turretType != null)
             {
                 InitialHealth = turretType.Health;
-                InitalSpeed = turretType.movementSpeed;
+                InitialSpeed = turretType.movementSpeed;
             }
             InitializeVariables();
         }
@@ -175,10 +196,11 @@ namespace TurretGame
 
             if (_Movement != null)
             {
-                _Movement.Speed = InitalSpeed;
+                _Movement.Speed = InitialSpeed;
                 _Movement.Acceleration = InitalAcceleration;
+                baseSpeed = InitialSpeed;
 
-                ModifiedSpeed = InitalSpeed;
+                ModifiedSpeed = InitialSpeed;
                 ModifiedAcceleration = InitalAcceleration;
             }
         }
@@ -237,7 +259,17 @@ namespace TurretGame
 
         public void AddMod(int AmtAdd, ItemScriptableObject Item)
         {
-
+            if (ItemsDictionary.ContainsKey(Item.Name))
+            {
+                ItemsDictionary[Item.Name].IncreaseStackAmt(AmtAdd);
+            }
+            else
+            {
+                GameObject newItem = Instantiate(Item.ItemPrefab);
+                newItem.transform.parent = this.transform;
+                ItemsDictionary.Add(Item.Name, newItem.GetComponent<ItemBase>());
+                newItem.GetComponent<ItemBase>().GetCharacterUnit(this);
+            }
         }
     }
 }
