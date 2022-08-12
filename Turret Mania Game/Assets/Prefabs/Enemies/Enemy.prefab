@@ -146,15 +146,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 552472514d15a7b42877b9c21ce12481, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  speed: {fileID: 0}
+  speedslider: {fileID: 0}
   turretType: {fileID: 0}
+  item: {fileID: 0}
+  item1: {fileID: 0}
+  thing: 0
   InitialHealth: 0
-  ModifiedHealth: 0
   InitialAmmo: 0
-  ModifiedAmmo: 0
-  InitalSpeed: 0
-  ModifiedSpeed: 0
+  InitialSpeed: 0
   InitalAcceleration: 0
-  ModifiedAcceleration: 0
   OnDamagedEvents:
     m_PersistentCalls:
       m_Calls:
@@ -184,7 +185,20 @@ MonoBehaviour:
         m_CallState: 2
   OnDeathEvents:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: -4921755334114599017}
+        m_TargetAssemblyTypeName: TurretGame.EnemyUnit, Assembly-CSharp
+        m_MethodName: DropExp
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  ExpOrb: {fileID: 5343851742255198131, guid: e1e4d13369f03aa49b9202f040a435bb, type: 3}
 --- !u!114 &2198315743130403225
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -272,8 +286,8 @@ ParticleSystemRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
+  m_SortingLayerID: -1720050965
+  m_SortingLayer: 3
   m_SortingOrder: 0
   m_RenderMode: 0
   m_MeshDistribution: 0
@@ -9946,8 +9960,8 @@ ParticleSystemRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
+  m_SortingLayerID: -1720050965
+  m_SortingLayer: 3
   m_SortingOrder: 0
   m_RenderMode: 0
   m_MeshDistribution: 0

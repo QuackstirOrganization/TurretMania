@@ -6,21 +6,16 @@ namespace TurretGame
 {
     public class IB_MoveSpeedNotShoot : ItemBase
     {
-        private float initialSpeed;
         private PlayerInputManager playerInputManager;
+        bool isApplied = false;
 
         // Start is called before the first frame update
         protected override void Start()
         {
             base.Start();
-
-            StackAmount = 3;
-
-            initialSpeed = _characterUnit.initalSpeed;
-
-            if (GetComponent<PlayerInputManager>() != null)
+            if (_characterUnit.GetComponent<PlayerInputManager>() != null)
             {
-                playerInputManager = GetComponent<PlayerInputManager>();
+                playerInputManager = _characterUnit.GetComponent<PlayerInputManager>();
 
                 playerInputManager.ShootActionDown += ProcEffects;
                 playerInputManager.ShootActionUp += RemoveEffects;
@@ -31,7 +26,7 @@ namespace TurretGame
 
         private void OnDestroy()
         {
-            if (GetComponent<PlayerInputManager>() != null)
+            if (_characterUnit.GetComponent<PlayerInputManager>() != null)
             {
                 playerInputManager.ShootActionDown -= ProcEffects;
                 playerInputManager.ShootActionUp -= RemoveEffects;
@@ -40,21 +35,31 @@ namespace TurretGame
 
         protected override void ProcEffects()
         {
+            if (!isApplied)
+            {
+                return;
+            }
+
             base.ProcEffects();
 
-            _characterUnit._movement.Speed = _characterUnit.modifiedSpeed;
+            _characterUnit.modifiedSpeed -= currentMultiplier;
+
+            isApplied = false;
         }
 
         protected override void RemoveEffects()
         {
             base.RemoveEffects();
 
-            _characterUnit._movement.Speed = _characterUnit.modifiedSpeed + increase();
+            _characterUnit.modifiedSpeed += currentMultiplier;
+
+            isApplied = true;
         }
 
-        float increase()
+        protected override void UpdateEffects()
         {
-            return initialSpeed * SlopeIncrease * StackAmount;
+            _characterUnit.modifiedSpeed -= currentMultiplier;
+            updateMultipler(slopeType, _characterUnit.initalSpeed, SlopeIncrease, increasePercent);
         }
     }
 }

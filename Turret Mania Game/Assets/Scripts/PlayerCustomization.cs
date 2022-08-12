@@ -57,7 +57,7 @@ namespace TurretGame
             if (TurretWeapons != null)
             {
                 //PlayerShooting.ProjectileSpeed = Head.ProjectileSpeed;
-                PlayerShooting.ProjectileSpeed = TurretWeapons[0].projectileSpeed;
+                //PlayerShooting.ProjectileSpeed = TurretWeapons[0].projectileSpeed;
 
             }
         }

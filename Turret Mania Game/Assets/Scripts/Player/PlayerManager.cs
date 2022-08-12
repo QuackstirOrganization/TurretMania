@@ -17,6 +17,9 @@ namespace TurretGame
         public Text Text_playerHealth;
         public Image Slider_playerHealth;
 
+        public Text Text_playerLevel;
+        public Image Slider_playerProgBar;
+
         // Start is called before the first frame update
         void Start()
         {
@@ -36,8 +39,10 @@ namespace TurretGame
 
             playerUnit.AmmoUIAction += UpdateAmmoUI;
             playerUnit.HealthUIAction += UpdateHealthUI;
+            playerUnit.ExpLevelUIAction += UpdateProgressBarUI;
             playerUnit.UpdateAmmoUI();
             playerUnit.UpdateHealthUI();
+            playerUnit.UpdateProgressUI();
         }
 
         public void UpdateAmmoUI(float maxAmmo, float currAmmo)
@@ -52,19 +57,34 @@ namespace TurretGame
             Slider_playerHealth.fillAmount = currHealth / maxHealth;
         }
 
+        public void UpdateProgressBarUI(float expNextLevel, float currentExp, int currLevel)
+        {
+            Text_playerLevel.text = currLevel.ToString();
+            Slider_playerProgBar.fillAmount = (currentExp / expNextLevel);
+        }
+
 
         void OnPlayerDeath()
         {
-            GlobalDebugs.DebugPM(this, "Player has died");
-
             //Unsubscribe from all events
             PlayerHealth.DeathAction -= OnPlayerDeath;
             playerUnit.AmmoUIAction -= UpdateAmmoUI;
             playerUnit.HealthUIAction -= UpdateHealthUI;
+            playerUnit.ExpLevelUIAction -= UpdateProgressBarUI;
 
+
+
+            GlobalDebugs.DebugPM(this, "Player has died");
 
             //reload scene
-            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+            Invoke("DELETEFUNCTION", 1);
+            //SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+        }
+
+        void DELETEFUNCTION()
+        {
+            SceneManager.LoadScene("Customization Screen");
+
         }
     }
 }

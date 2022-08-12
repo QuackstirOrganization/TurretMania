@@ -10,7 +10,7 @@ public class Mouse : MonoBehaviour
 
     void Update()
     {
-        Cursor.visible = false;
+        //Cursor.visible = false;
         //To get the current mouse position
         mousePosition = Input.mousePosition;
         //Convert the mousePosition according to World position

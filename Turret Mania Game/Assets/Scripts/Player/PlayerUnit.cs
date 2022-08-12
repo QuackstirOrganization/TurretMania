@@ -13,10 +13,47 @@ namespace TurretGame
         private PlayerInputManager PlayerInput;
         public TurretWeapon[] Weapons;
 
+        [SerializeField] private float ExpNextLevel = 3;
+        public float expNextLevel { get { return ExpNextLevel; } }
+
+
+        [SerializeField] private float CurrExp = 0;
+        public float currExp { get { return CurrExp; } set { CurrExp = value; } }
+
+
+        [SerializeField] private int CurrLevel = 1;
+        public int currLevel { get { return CurrLevel; } }
+
         private Vector2 moveVectorTot;
 
         public Action<float, float> AmmoUIAction;
         public Action<float, float> HealthUIAction;
+        public Action<float, float, int> ExpLevelUIAction;
+
+        public ItemScriptableObject[] duck;
+
+        private void OnTriggerEnter2D(Collider2D collision)
+        {
+            if (!collision.CompareTag("PickUp"))
+            {
+                return;
+            }
+
+            CurrExp++;
+
+            if (CurrExp >= ExpNextLevel)
+            {
+                CurrLevel++;
+                CurrExp = 0;
+                ExpNextLevel += 2;
+                AddItem(1, duck[UnityEngine.Random.Range(0, duck.Length)]);
+            }
+
+            Destroy(collision.gameObject);
+
+            UpdateProgressUI();
+        }
+
 
         protected override void Start()
         {
@@ -143,6 +180,12 @@ namespace TurretGame
         {
             if (AmmoUIAction != null)
                 AmmoUIAction(_Ammo.MaxAmmo, _Ammo.CurrAmmo);
+        }
+
+        public void UpdateProgressUI()
+        {
+            if (ExpLevelUIAction != null)
+                ExpLevelUIAction(ExpNextLevel, CurrExp, CurrLevel);
         }
         //--------------------------------------------------//
     }

@@ -29,6 +29,7 @@ public class Ammo : MonoBehaviour
 
     //[Header("Events")]
     public event Action ReloadAction;
+    public event Action ThrowAction;
 
     // Start is called before the first frame update
     void Start()
@@ -56,6 +57,9 @@ public class Ammo : MonoBehaviour
         GunFlung.transform.rotation = Turret.transform.rotation;
 
         TurretSprite.enabled = false;
+
+        if (ThrowAction != null)
+            ThrowAction();
 
         canPickUp = false;
         Invoke("PickUp", 0.5f);

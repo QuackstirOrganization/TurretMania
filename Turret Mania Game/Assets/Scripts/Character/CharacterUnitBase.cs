@@ -9,10 +9,26 @@ namespace TurretGame
 {
     public abstract class CharacterUnitBase : MonoBehaviour
     {
+        public Text itemcrap;
         public Text speed;
         public Image speedslider;
 
         public Turret turretType;
+
+        public ItemScriptableObject item;
+        public ItemScriptableObject item1;
+
+        public bool thing = false;
+
+        protected Dictionary<string, ItemBase> ItemsDictionary = new Dictionary<string, ItemBase>();
+        protected Dictionary<Rarity, int> ItemRarityAmountDictionary = new Dictionary<Rarity, int>();
+
+        public int getItemRarityAMT(Rarity rarity)
+        {
+            int value;
+            ItemRarityAmountDictionary.TryGetValue(rarity, out value);
+            return value;
+        }
 
         #region Health
         protected Health _Health;
@@ -71,10 +87,10 @@ namespace TurretGame
 
         //-----Movement-----//
         [Header("Movement Variables")]
-        [SerializeField] protected float InitalSpeed;
+        [SerializeField] protected float InitialSpeed;
         public float initalSpeed
         {
-            get { return InitalSpeed; }
+            get { return InitialSpeed; }
         }
 
         protected float ModifiedSpeed;
@@ -126,20 +142,24 @@ namespace TurretGame
 
         private void Update()
         {
+            if (!thing)
+            {
+                return;
+            }
+
             if (Input.GetKeyDown(KeyCode.P))
             {
-                gameObject.AddComponent<IB_MoveSpeedNotShoot>();
+                AddItem(1, item);
             }
 
             if (Input.GetKeyDown(KeyCode.O))
             {
-                gameObject.AddComponent<IB_MoveSpeedIncrease>();
-
+                AddItem(1, item1);
             }
 
             if (speed != null)
             {
-                speed.text = _Rb2D.velocity.magnitude.ToString("F1");
+                speed.text = _Rb2D.velocity.magnitude.ToString("F2");
                 speedslider.fillAmount = Mathf.Lerp(speedslider.fillAmount, _Rb2D.velocity.magnitude / 100, Time.deltaTime);
             }
         }
@@ -154,7 +174,7 @@ namespace TurretGame
             if (turretType != null)
             {
                 InitialHealth = turretType.Health;
-                InitalSpeed = turretType.movementSpeed;
+                InitialSpeed = turretType.movementSpeed;
             }
             InitializeVariables();
         }
@@ -175,10 +195,10 @@ namespace TurretGame
 
             if (_Movement != null)
             {
-                _Movement.Speed = InitalSpeed;
+                _Movement.Speed = InitialSpeed;
                 _Movement.Acceleration = InitalAcceleration;
 
-                ModifiedSpeed = InitalSpeed;
+                ModifiedSpeed = InitialSpeed;
                 ModifiedAcceleration = InitalAcceleration;
             }
         }
@@ -233,11 +253,33 @@ namespace TurretGame
         protected virtual void OnDeath()
         {
             OnDeathEvents.Invoke();
+
+            if (itemcrap != null)
+                itemcrap.text = getItemRarityAMT(Rarity.Common).ToString();
         }
 
-        public void AddMod(int AmtAdd, ItemScriptableObject Item)
+        public void AddItem(int AmtAdd, ItemScriptableObject Item)
         {
+            if (ItemsDictionary.ContainsKey(Item.Name))
+            {
+                ItemsDictionary[Item.Name].IncreaseStackAmt(AmtAdd);
+            }
+            else
+            {
+                GameObject newItem = Instantiate(Item.ItemPrefab);
+                newItem.transform.parent = this.transform;
+                ItemsDictionary.Add(Item.Name, newItem.GetComponent<ItemBase>());
+                newItem.GetComponent<ItemBase>().GetCharacterUnit(this);
+            }
 
+            if (ItemRarityAmountDictionary.ContainsKey(Item.itemRarity))
+            {
+                ItemRarityAmountDictionary[item.itemRarity] += AmtAdd;
+            }
+            else
+            {
+                ItemRarityAmountDictionary.Add(item.itemRarity, AmtAdd);
+            }
         }
     }
 }
