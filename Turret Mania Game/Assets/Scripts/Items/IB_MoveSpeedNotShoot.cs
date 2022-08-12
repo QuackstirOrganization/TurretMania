@@ -7,6 +7,7 @@ namespace TurretGame
     public class IB_MoveSpeedNotShoot : ItemBase
     {
         private PlayerInputManager playerInputManager;
+        bool isApplied = false;
 
         // Start is called before the first frame update
         protected override void Start()
@@ -34,9 +35,16 @@ namespace TurretGame
 
         protected override void ProcEffects()
         {
+            if (!isApplied)
+            {
+                return;
+            }
+
             base.ProcEffects();
 
             _characterUnit.modifiedSpeed -= currentMultiplier;
+
+            isApplied = false;
         }
 
         protected override void RemoveEffects()
@@ -44,6 +52,8 @@ namespace TurretGame
             base.RemoveEffects();
 
             _characterUnit.modifiedSpeed += currentMultiplier;
+
+            isApplied = true;
         }
 
         protected override void UpdateEffects()

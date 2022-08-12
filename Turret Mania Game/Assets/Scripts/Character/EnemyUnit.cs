@@ -11,6 +11,8 @@ namespace TurretGame
 
         private SpriteRenderer EnemyVisuals;
 
+        public GameObject ExpOrb;
+
         // Start is called before the first frame update
         protected override void Start()
         {
@@ -25,6 +27,11 @@ namespace TurretGame
         {
             base.OnDeath();
             Destroy(gameObject);
+        }
+
+        public void DropExp()
+        {
+            Instantiate(ExpOrb, transform.position, Quaternion.identity);
         }
     }
 }

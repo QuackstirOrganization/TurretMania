@@ -10,6 +10,7 @@ namespace TurretGame
         public string Name;
         public GameObject ItemPrefab;
 
+        public Rarity itemRarity;
         public SlopeType slopeType;
         public float initialVal;
         public float SlopeIncrease = 0.5f;

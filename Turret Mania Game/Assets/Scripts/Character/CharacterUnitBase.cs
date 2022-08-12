@@ -9,6 +9,7 @@ namespace TurretGame
 {
     public abstract class CharacterUnitBase : MonoBehaviour
     {
+        public Text itemcrap;
         public Text speed;
         public Image speedslider;
 
@@ -20,6 +21,14 @@ namespace TurretGame
         public bool thing = false;
 
         protected Dictionary<string, ItemBase> ItemsDictionary = new Dictionary<string, ItemBase>();
+        protected Dictionary<Rarity, int> ItemRarityAmountDictionary = new Dictionary<Rarity, int>();
+
+        public int getItemRarityAMT(Rarity rarity)
+        {
+            int value;
+            ItemRarityAmountDictionary.TryGetValue(rarity, out value);
+            return value;
+        }
 
         #region Health
         protected Health _Health;
@@ -84,16 +93,6 @@ namespace TurretGame
             get { return InitialSpeed; }
         }
 
-        //[SerializeField] protected float BaseSpeed;
-        //public float baseSpeed
-        //{
-        //    get { return BaseSpeed; }
-        //    set
-        //    {
-        //        BaseSpeed = value;
-        //    }
-        //}
-
         protected float ModifiedSpeed;
         public float modifiedSpeed
         {
@@ -150,12 +149,12 @@ namespace TurretGame
 
             if (Input.GetKeyDown(KeyCode.P))
             {
-                AddMod(1, item);
+                AddItem(1, item);
             }
 
             if (Input.GetKeyDown(KeyCode.O))
             {
-                AddMod(1, item1);
+                AddItem(1, item1);
             }
 
             if (speed != null)
@@ -254,9 +253,12 @@ namespace TurretGame
         protected virtual void OnDeath()
         {
             OnDeathEvents.Invoke();
+
+            if (itemcrap != null)
+                itemcrap.text = getItemRarityAMT(Rarity.Common).ToString();
         }
 
-        public void AddMod(int AmtAdd, ItemScriptableObject Item)
+        public void AddItem(int AmtAdd, ItemScriptableObject Item)
         {
             if (ItemsDictionary.ContainsKey(Item.Name))
             {
@@ -268,6 +270,15 @@ namespace TurretGame
                 newItem.transform.parent = this.transform;
                 ItemsDictionary.Add(Item.Name, newItem.GetComponent<ItemBase>());
                 newItem.GetComponent<ItemBase>().GetCharacterUnit(this);
+            }
+
+            if (ItemRarityAmountDictionary.ContainsKey(Item.itemRarity))
+            {
+                ItemRarityAmountDictionary[item.itemRarity] += AmtAdd;
+            }
+            else
+            {
+                ItemRarityAmountDictionary.Add(item.itemRarity, AmtAdd);
             }
         }
     }

@@ -14,6 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Name: Faster
   ItemPrefab: {fileID: 6212088398191150146, guid: 5c59e0f67877cc241bf30d95ac2bddcc, type: 3}
+  itemRarity: 0
   slopeType: 0
   initialVal: 5
   SlopeIncrease: 1.5

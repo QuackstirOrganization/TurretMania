@@ -7,6 +7,7 @@ namespace TurretGame
     public class IB_MoveSpeedNoTurret : ItemBase
     {
         private Ammo _ammo;
+        bool isApplied = false;
 
         // Start is called before the first frame update
         protected override void Start()
@@ -36,13 +37,21 @@ namespace TurretGame
             base.ProcEffects();
 
             _characterUnit.modifiedSpeed += currentMultiplier;
+            isApplied = true;
         }
 
         protected override void RemoveEffects()
         {
+            if (!isApplied)
+            {
+                return;
+            }
+
             base.RemoveEffects();
 
             _characterUnit.modifiedSpeed -= currentMultiplier;
+
+            isApplied = false;
         }
 
         protected override void UpdateEffects()
