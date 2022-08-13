@@ -29,6 +29,7 @@ namespace TurretGame
                 Destroy(this.gameObject);
             }
 
+            FindObjectOfType<SavingLoading>().Load();
 
 
             DontDestroyOnLoad(gameObject);
@@ -37,19 +38,27 @@ namespace TurretGame
 
         void game()
         {
-            player._health.DeathAction += addScrap;
+            //player._health.DeathAction += addScrap;
+            player._health.DeathAction += death;
+            player.AddItemAction += addScrap;
 
         }
 
-        private void addScrap()
+        void death()
         {
-            commonScrap += player.getItemRarityAMT(Rarity.Common) * 100;
-            player._health.DeathAction -= addScrap;
+            player._health.DeathAction -= death;
+            player.AddItemAction -= addScrap;
+
+        }
+
+        private void addScrap(int amount)
+        {
+            //commonScrap += player.getItemRarityAMT(Rarity.Common) * 100;
+            commonScrap += amount * 100;
+            //player._health.DeathAction -= addScrap;
 
             if (AddScrapAction != null)
                 AddScrapAction(commonScrap);
-
-            CaptureState();
         }
 
         public void removeScrap(int removeAmount)
@@ -60,7 +69,7 @@ namespace TurretGame
                 AddScrapAction(commonScrap);
         }
 
-
+        #region Saving
         public object CaptureState()
         {
             GlobalDebugs.DebugPM(this, "Scrap has been saved!");
@@ -77,19 +86,18 @@ namespace TurretGame
             commonScrap = CurrentScrapData.i_commonScrap;
         }
 
-
+        [Serializable]
         private struct CurrentScrap
         {
             //public Dictionary<Rarity, int> i_D_ScrapRarityAmount;
             public int i_commonScrap;
         }
-
+        #endregion
 
         #region Scene Functions
         void OnSceneLoaded(Scene scene, LoadSceneMode mode)
         {
             Debug.Log("OnSceneLoaded: " + scene.name);
-            Debug.Log(mode);
 
             if (FindObjectOfType<PlayerUnit>() != null)
             {

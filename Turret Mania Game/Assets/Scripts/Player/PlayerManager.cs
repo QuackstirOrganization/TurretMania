@@ -20,6 +20,8 @@ namespace TurretGame
         public Text Text_playerLevel;
         public Image Slider_playerProgBar;
 
+        public GameObject DeathScreen;
+
         // Start is called before the first frame update
         void Start()
         {
@@ -33,6 +35,8 @@ namespace TurretGame
             #region Player Health Events
             PlayerHealth.DeathAction += OnPlayerDeath;
             #endregion
+
+            DeathScreen.SetActive(false);
 
             //Subscribe to player shoot events
             //PlayerShooting.ShootAction += UpdateAmmoUI;
@@ -72,16 +76,17 @@ namespace TurretGame
             playerUnit.HealthUIAction -= UpdateHealthUI;
             playerUnit.ExpLevelUIAction -= UpdateProgressBarUI;
 
+            DeathScreen.SetActive(true);
 
 
             GlobalDebugs.DebugPM(this, "Player has died");
 
             //reload scene
-            Invoke("DELETEFUNCTION", 1);
             //SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+            FindObjectOfType<SavingLoading>().Save();
         }
 
-        void DELETEFUNCTION()
+        public void DELETEFUNCTION()
         {
             SceneManager.LoadScene("Customization Screen");
 

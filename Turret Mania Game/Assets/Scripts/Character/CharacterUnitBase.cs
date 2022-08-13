@@ -1,4 +1,4 @@
-using System.Collections;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
@@ -29,6 +29,8 @@ namespace TurretGame
             ItemRarityAmountDictionary.TryGetValue(rarity, out value);
             return value;
         }
+
+        public Action<int> AddItemAction;
 
         #region Health
         protected Health _Health;
@@ -280,6 +282,9 @@ namespace TurretGame
             {
                 ItemRarityAmountDictionary.Add(item.itemRarity, AmtAdd);
             }
+
+            if (AddItemAction != null)
+                AddItemAction(AmtAdd);
         }
     }
 }
