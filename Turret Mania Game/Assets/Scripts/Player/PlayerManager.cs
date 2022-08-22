@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using Debugs;
 using UnityEngine.UI;
+using TMPro;
 
 namespace TurretGame
 {
@@ -11,13 +12,16 @@ namespace TurretGame
         private Health PlayerHealth;
         private PlayerUnit playerUnit;
 
+        [Header("Ammo")]
         public Text Text_playerAmmo;
         public Image Slider_playerAmmo;
 
-        public Text Text_playerHealth;
+        [Header("Health")]
+        public TMP_Text Text_playerHealth;
         public Image Slider_playerHealth;
 
-        public Text Text_playerLevel;
+        [Header("Progression")]
+        //public Text Text_playerLevel;
         public Image Slider_playerProgBar;
 
         public GameObject DeathScreen;
@@ -44,6 +48,11 @@ namespace TurretGame
             playerUnit.AmmoUIAction += UpdateAmmoUI;
             playerUnit.HealthUIAction += UpdateHealthUI;
             playerUnit.ExpLevelUIAction += UpdateProgressBarUI;
+            Invoke("UpdateAllUI", 0.1f);
+        }
+
+        void UpdateAllUI()
+        {
             playerUnit.UpdateAmmoUI();
             playerUnit.UpdateHealthUI();
             playerUnit.UpdateProgressUI();
@@ -63,7 +72,7 @@ namespace TurretGame
 
         public void UpdateProgressBarUI(float expNextLevel, float currentExp, int currLevel)
         {
-            Text_playerLevel.text = currLevel.ToString();
+            //Text_playerLevel.text = currLevel.ToString();
             Slider_playerProgBar.fillAmount = (currentExp / expNextLevel);
         }
 
