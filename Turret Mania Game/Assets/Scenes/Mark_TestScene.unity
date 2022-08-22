@@ -53739,6 +53739,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 11400000, guid: f274141a76be9234c9ee369c64ec9ef8, type: 2}
     - target: {fileID: 861093946782647323, guid: e5e5dbb6498d77645b450046937bd89c, type: 3}
+      propertyPath: quack
+      value: 
+      objectReference: {fileID: 11500000, guid: 7e62728718a773847a2593a724857c94, type: 3}
+    - target: {fileID: 861093946782647323, guid: e5e5dbb6498d77645b450046937bd89c, type: 3}
       propertyPath: speed
       value: 
       objectReference: {fileID: 0}
