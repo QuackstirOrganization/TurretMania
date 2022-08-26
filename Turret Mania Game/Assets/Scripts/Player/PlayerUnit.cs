@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEditor;
 using UnityEngine.Events;
 using UnityEngine.UI;
 using Debugs;
@@ -32,8 +33,18 @@ namespace TurretGame
 
         public ItemScriptableObject[] duck;
 
+        public MonoScript quack;
+
+        public void addDuck(System.Type aType)
+        {
+            Component inst = gameObject.AddComponent(aType);
+        }
+
         private void OnTriggerEnter2D(Collider2D collision)
         {
+            addDuck(quack.GetType());
+
+
             if (!collision.CompareTag("PickUp"))
             {
                 return;
