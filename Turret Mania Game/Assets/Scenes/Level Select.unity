@@ -506,6 +506,7 @@ MonoBehaviour:
   selectButton: {fileID: 1706938977308504446, guid: 27d69bcf18134844da3f78e7f4b7887e, type: 3}
   SelectOptions:
   - {fileID: 11400000, guid: 3b5ecc94b5842b74697d79dcad7c9042, type: 2}
+  - {fileID: 11400000, guid: f7f4c29c86858dc40ae5086107c85bef, type: 2}
 --- !u!1 &494783465
 GameObject:
   m_ObjectHideFlags: 0
