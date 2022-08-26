@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using UnityEngine.SceneManagement;
 
 namespace TurretGame
 {
@@ -24,8 +25,9 @@ namespace TurretGame
 
         void ChangeLevelVisuals(LevelSelectButton_ScriptableObject SelectedLevel)
         {
-            Background.sprite = SelectedLevel.Picture;
-            FlavorText.text = SelectedLevel.Description;
+            //Background.sprite = SelectedLevel.Picture;
+            //FlavorText.text = SelectedLevel.Description;
+            SceneManager.LoadScene(SelectedLevel.SceneName);
         }
     }
 }
