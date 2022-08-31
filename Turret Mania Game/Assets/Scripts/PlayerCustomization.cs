@@ -10,13 +10,30 @@ namespace TurretGame
         public Turret TurretType;
         public TurretWeapon[] TurretWeapons;
 
+        private static PlayerCustomization I_PlayerCustomize;
+        public static PlayerCustomization i_PlayerCustomize
+        {
+            get { return I_PlayerCustomize; }
+            set
+            {
+                I_PlayerCustomize = value;
+            }
+        }
+
         // Start is called before the first frame update
         void Awake()
         {
+            if (I_PlayerCustomize == null)
+            {
+                I_PlayerCustomize = this;
+            }
+            else
+            {
+                Destroy(this.gameObject);
+            }
+
             DontDestroyOnLoad(gameObject);
             SceneManager.sceneLoaded += OnSceneLoaded;
-
-
         }
 
         public void HeadSelect(Turret newHead)

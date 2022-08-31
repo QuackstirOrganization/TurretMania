@@ -12,5 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 86393531cc7dc164ba87b2e584b2d25d, type: 3}
   m_Name: Turret Tank
   m_EditorClassIdentifier: 
+  Name: Tank
+  Description: I'm a big boi
+  Picture: {fileID: -1421372186, guid: a21e42465c8f2f34388d5d39696ab0d8, type: 3}
   Health: 50
   movementSpeed: 5

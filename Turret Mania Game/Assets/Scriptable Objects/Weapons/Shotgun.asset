@@ -12,6 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1d6a94b8b24b77f47802f5a2594e3e6f, type: 3}
   m_Name: Shotgun
   m_EditorClassIdentifier: 
+  Name: Shotgun
+  Description: Gamer ducks
+  Picture: {fileID: 1320185997, guid: a21e42465c8f2f34388d5d39696ab0d8, type: 3}
   damage: 10
   fireRate: 0.5
   projectileSpeed: 5

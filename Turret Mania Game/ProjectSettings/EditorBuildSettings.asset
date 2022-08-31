@@ -6,6 +6,9 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
+    path: Assets/Scenes/Level Select.unity
+    guid: 299164a773fa086498db7e6565143990
+  - enabled: 1
     path: Assets/Scenes/Mark_TestScene.unity
     guid: 2cda990e2423bbf4892e6590ba056729
   - enabled: 1
@@ -14,4 +17,10 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/MainMenu.unity
     guid: b600299e17590824fa4f6395d9836d16
+  - enabled: 1
+    path: Assets/Scenes/JoshSceneLV1.unity
+    guid: 2a951eb1f2d855b41b93341876b5416d
+  - enabled: 1
+    path: Assets/Scenes/JoshSceneLV2.unity
+    guid: e004fe4466cb57b4f9178a06740ecb99
   m_configObjects: {}

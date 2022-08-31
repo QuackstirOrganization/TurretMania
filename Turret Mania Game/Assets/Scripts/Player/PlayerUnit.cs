@@ -8,8 +8,17 @@ using Debugs;
 
 namespace TurretGame
 {
+    [Serializable]
+    public class beQuackin
+    {
+        public float huh;
+        public float wuh;
+    }
+
     public class PlayerUnit : CharacterUnitBase
     {
+        public beQuackin dobeQuackin;
+
         private Shoot PlayerShooting;
         private PlayerInputManager PlayerInput;
         public TurretWeapon[] Weapons;
@@ -35,14 +44,14 @@ namespace TurretGame
 
         public MonoScript quack;
 
-        public void addDuck(System.Type aType)
-        {
-            Component inst = gameObject.AddComponent(aType);
-        }
+        //public void addDuck(System.Type aType)
+        //{
+        //    Component inst = gameObject.AddComponent(aType);
+        //}
 
         private void OnTriggerEnter2D(Collider2D collision)
         {
-            addDuck(quack.GetType());
+            //addDuck(quack.GetType());
 
 
             if (!collision.CompareTag("PickUp"))
