@@ -33,16 +33,16 @@ namespace TurretGame
 
         public ItemScriptableObject[] duck;
 
-        public MonoScript quack;
+        //public MonoScript quack;
 
-        public void addDuck(System.Type aType)
+        /*public void addDuck(System.Type aType)
         {
             Component inst = gameObject.AddComponent(aType);
-        }
+        }*/
 
         private void OnTriggerEnter2D(Collider2D collision)
         {
-            addDuck(quack.GetType());
+            //addDuck(quack.GetType());
 
 
             if (!collision.CompareTag("PickUp"))
