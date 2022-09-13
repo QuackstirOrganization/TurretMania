@@ -13,7 +13,6 @@ namespace TurretGame
         public Text speed;
         public Image speedslider;
 
-        public Turret turretType;
 
         public ItemScriptableObject item;
         public ItemScriptableObject item1;
@@ -33,6 +32,7 @@ namespace TurretGame
         public Action<int> AddItemAction;
 
         #region Health
+        public CharacterStat newHealth;
         protected Health _Health;
         public Health _health { get { return _Health; } }
 
@@ -173,11 +173,7 @@ namespace TurretGame
             InitializeComponents();
             SubscribeEvents();
 
-            if (turretType != null)
-            {
-                InitialHealth = turretType.Health;
-                InitialSpeed = turretType.movementSpeed;
-            }
+
             InitializeVariables();
         }
 
@@ -286,5 +282,7 @@ namespace TurretGame
             if (AddItemAction != null)
                 AddItemAction(AmtAdd);
         }
+
+
     }
 }

@@ -8,8 +8,17 @@ using Debugs;
 
 namespace TurretGame
 {
+    [Serializable]
+    public class beQuackin
+    {
+        public float huh;
+        public float wuh;
+    }
+
     public class PlayerUnit : CharacterUnitBase
     {
+        public beQuackin dobeQuackin;
+
         private Shoot PlayerShooting;
         private PlayerInputManager PlayerInput;
         public TurretWeapon[] Weapons;
@@ -35,14 +44,26 @@ namespace TurretGame
 
         public MonoScript quack;
 
-        public void addDuck(System.Type aType)
+
+        [SerializeField] private Turret TurretType;
+        public Turret turretType
         {
-            Component inst = gameObject.AddComponent(aType);
+            get { return TurretType; }
+            set
+            {
+                TurretType = value;
+
+                setVariables();
+            }
         }
+        //public void addDuck(System.Type aType)
+        //{
+        //    Component inst = gameObject.AddComponent(aType);
+        //}
 
         private void OnTriggerEnter2D(Collider2D collision)
         {
-            addDuck(quack.GetType());
+            //addDuck(quack.GetType());
 
 
             if (!collision.CompareTag("PickUp"))
@@ -92,6 +113,7 @@ namespace TurretGame
 
             #endregion
             selectWeapon(0);
+            setVariables();
 
             UpdateAmmoUI();
             UpdateHealthUI();
@@ -199,5 +221,16 @@ namespace TurretGame
                 ExpLevelUIAction(ExpNextLevel, CurrExp, CurrLevel);
         }
         //--------------------------------------------------//
+
+        private void setVariables()
+        {
+            if (turretType != null)
+            {
+                InitialHealth = TurretType.Health;
+                InitialSpeed = TurretType.movementSpeed;
+            }
+
+            newHealth.BaseValue = TurretType.Health;
+        }
     }
 }

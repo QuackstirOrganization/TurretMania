@@ -2,12 +2,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 namespace TurretGame
 {
     public class PlayerCustomizationButton : MonoBehaviour
     {
-        private Text nameText;
+        private TMP_Text nameText;
         public string Name;
 
         private bool isBought = false;
@@ -21,7 +22,7 @@ namespace TurretGame
         {
             _PlayerCustomization = FindObjectOfType<PlayerCustomization>();
 
-            nameText = GetComponentInChildren<Text>();
+            nameText = GetComponentInChildren<TMP_Text>();
 
             nameText.text = Name + " Cost: " + cost;
         }

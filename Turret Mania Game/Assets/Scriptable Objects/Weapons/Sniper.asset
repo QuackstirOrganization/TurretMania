@@ -12,6 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1d6a94b8b24b77f47802f5a2594e3e6f, type: 3}
   m_Name: Sniper
   m_EditorClassIdentifier: 
+  Name: Sniper
+  Description: Gamer 360
+  Picture: {fileID: 1061140078, guid: a21e42465c8f2f34388d5d39696ab0d8, type: 3}
   damage: 10
   fireRate: 1
   projectileSpeed: 100

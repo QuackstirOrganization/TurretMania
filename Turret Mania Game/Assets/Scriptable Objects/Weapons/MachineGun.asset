@@ -12,6 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1d6a94b8b24b77f47802f5a2594e3e6f, type: 3}
   m_Name: MachineGun
   m_EditorClassIdentifier: 
+  Name: Machine Gun
+  Description: Gamers
+  Picture: {fileID: 21300000, guid: c2abf3a9b9526d5448365daa10972f6d, type: 3}
   damage: 3
   fireRate: 5
   projectileSpeed: 5
