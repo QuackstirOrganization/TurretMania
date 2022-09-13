@@ -9,5 +9,6 @@ namespace TurretGame
     {
         public float Health = 10;
         public float movementSpeed = 5;
+        public Sprite TurretSprite;
     }
 }

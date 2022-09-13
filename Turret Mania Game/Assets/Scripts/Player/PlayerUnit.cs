@@ -44,6 +44,18 @@ namespace TurretGame
 
         public MonoScript quack;
 
+
+        [SerializeField] private Turret TurretType;
+        public Turret turretType
+        {
+            get { return TurretType; }
+            set
+            {
+                TurretType = value;
+
+                setVariables();
+            }
+        }
         //public void addDuck(System.Type aType)
         //{
         //    Component inst = gameObject.AddComponent(aType);
@@ -101,6 +113,7 @@ namespace TurretGame
 
             #endregion
             selectWeapon(0);
+            setVariables();
 
             UpdateAmmoUI();
             UpdateHealthUI();
@@ -208,5 +221,16 @@ namespace TurretGame
                 ExpLevelUIAction(ExpNextLevel, CurrExp, CurrLevel);
         }
         //--------------------------------------------------//
+
+        private void setVariables()
+        {
+            if (turretType != null)
+            {
+                InitialHealth = TurretType.Health;
+                InitialSpeed = TurretType.movementSpeed;
+            }
+
+            newHealth.BaseValue = TurretType.Health;
+        }
     }
 }

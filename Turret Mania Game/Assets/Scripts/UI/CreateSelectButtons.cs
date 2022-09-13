@@ -11,6 +11,14 @@ namespace TurretGame
         public GameObject buttonObject;
         public string name;
         public bool isEnabled;
+
+        public CreatedSelectButtons(SelectOption_SO buttonSO, GameObject buttonObject, string name, bool isEnabled)
+        {
+            this.buttonSO = buttonSO;
+            this.buttonObject = buttonObject;
+            this.name = name;
+            this.isEnabled = isEnabled;
+        }
     }
 
 
@@ -18,7 +26,8 @@ namespace TurretGame
     {
         public GameObject selectButton;
         public SelectOption_SO[] SelectOptions;
-        public List<CreatedSelectButtons> selectedButtons = new List<CreatedSelectButtons>();
+        //public List<CreatedSelectButtons> selectedButtons = new List<CreatedSelectButtons>();
+        public Dictionary<string, CreatedSelectButtons> D_selectedButtons = new Dictionary<string, CreatedSelectButtons>();
         // Start is called before the first frame update
         void Awake()
         {
@@ -36,16 +45,31 @@ namespace TurretGame
                 newButton.name = option.name;
                 newButton.isEnabled = true;
 
-                selectedButtons.Add(newButton);
+                //selectedButtons.Add(newButton);
+                D_selectedButtons.Add(option.name, newButton);
             }
+        }
+
+        public CreatedSelectButtons findOptions(SelectOption_SO buttonWant)
+        {
+            return D_selectedButtons[buttonWant.name];
+        }
+
+        public void modifyOptionsEnabled(CreatedSelectButtons modThis, bool isActive)
+        {
+            CreatedSelectButtons buttonGot =
+                new CreatedSelectButtons
+                (modThis.buttonSO, modThis.buttonObject, modThis.name, isActive);
+
+            D_selectedButtons[buttonGot.name] = buttonGot;
         }
 
         [ContextMenu("Update Buttons")]
         public void updateButtonList()
         {
-            foreach (CreatedSelectButtons button in selectedButtons)
+            foreach (var button in D_selectedButtons)
             {
-                button.buttonObject.SetActive(button.isEnabled);
+                button.Value.buttonObject.SetActive(button.Value.isEnabled);
             }
         }
     }

@@ -8,7 +8,9 @@ namespace TurretGame
     public class PlayerCustomization : MonoBehaviour
     {
         public Turret TurretType;
-        public TurretWeapon[] TurretWeapons;
+        //public TurretWeapon[] TurretWeapons;
+
+        private PlayerUnit PlayerCharacterUnit;
 
         private static PlayerCustomization I_PlayerCustomize;
         public static PlayerCustomization i_PlayerCustomize
@@ -34,11 +36,14 @@ namespace TurretGame
 
             DontDestroyOnLoad(gameObject);
             SceneManager.sceneLoaded += OnSceneLoaded;
+
+            PlayerCharacterUnit = FindObjectOfType<PlayerUnit>();
         }
 
         public void HeadSelect(Turret newHead)
         {
             TurretType = newHead;
+            // PlayerCharacterUnit.turretType = newHead;
         }
 
         public void BottomSelect(TurretWeapon newBottom)
@@ -65,18 +70,14 @@ namespace TurretGame
 
             PlayerShooting = Player.GetComponentInChildren<Shoot>();
 
-            //if (TurretType != null)
+
+
+            //if (TurretWeapons != null)
             //{
-            //    PlayerCharacterUnit.initialHealth = TurretType.Health;
-            //    PlayerCharacterUnit.initalSpeed = TurretType.movementSpeed;
+            //    //PlayerShooting.ProjectileSpeed = Head.ProjectileSpeed;
+            //    //PlayerShooting.ProjectileSpeed = TurretWeapons[0].projectileSpeed;
+
             //}
-
-            if (TurretWeapons != null)
-            {
-                //PlayerShooting.ProjectileSpeed = Head.ProjectileSpeed;
-                //PlayerShooting.ProjectileSpeed = TurretWeapons[0].projectileSpeed;
-
-            }
         }
 
         #region Scene Functions
