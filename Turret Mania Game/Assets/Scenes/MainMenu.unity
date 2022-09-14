@@ -2172,6 +2172,10 @@ PrefabInstance:
       propertyPath: TurretType
       value: 
       objectReference: {fileID: 11400000, guid: f1d204e3d41dbea4d840d38318f11416, type: 2}
+    - target: {fileID: 861093946782647323, guid: e5e5dbb6498d77645b450046937bd89c, type: 3}
+      propertyPath: CS_HealthVar.BaseValue
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 5102982184546042388, guid: e5e5dbb6498d77645b450046937bd89c, type: 3}
       propertyPath: m_RootOrder
       value: 2

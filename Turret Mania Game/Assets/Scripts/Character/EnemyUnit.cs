@@ -23,9 +23,9 @@ namespace TurretGame
             EnemyVisuals = GetComponentInChildren<SpriteRenderer>();
 
         }
-        protected override void OnDeath()
+        protected override void V_Death()
         {
-            base.OnDeath();
+            base.V_Death();
             Destroy(gameObject);
         }
 

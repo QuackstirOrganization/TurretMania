@@ -22,10 +22,11 @@ namespace TurretGame
         // Update is called once per frame
         void Update()
         {
-            MoveAction(Input.GetAxisRaw(HorizontalMoveInput),
-                Input.GetAxisRaw(VerticalMoveInput));
+            if (MoveAction != null)
+                MoveAction(Input.GetAxisRaw(HorizontalMoveInput),
+                    Input.GetAxisRaw(VerticalMoveInput));
 
-            
+
             if (Input.GetButtonDown(ShootInput) && ShootActionDown != null)
             {
                 ShootActionDown();

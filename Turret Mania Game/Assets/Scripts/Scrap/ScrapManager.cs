@@ -39,14 +39,14 @@ namespace TurretGame
         void game()
         {
             //player._health.DeathAction += addScrap;
-            player._health.DeathAction += death;
+            //player._health.DeathAction += death;
             player.AddItemAction += addScrap;
 
         }
 
         void death()
         {
-            player._health.DeathAction -= death;
+            //player._health.DeathAction -= death;
             player.AddItemAction -= addScrap;
 
         }

@@ -19,6 +19,7 @@ the specified MOD_TYPE value.
 Once this is finished, actualValue is calculated using these modifiers.
 *******************************************************************************/
 using System.Collections.Generic;
+using UnityEngine;
 
 [System.Serializable]
 public class CharacterStat
@@ -49,6 +50,11 @@ public class CharacterStat
     //Getters
     public float GetStat()
     {
+        Debug.Log("Trying to get stat!!!");
+
+        UpdateStat();
+
+
         if (treatAsInt)
         {
             return (int)actualValue;
@@ -61,9 +67,12 @@ public class CharacterStat
     //Updates the actualValue of this stat using the stat's list of stat modifiers
     public void UpdateStat()
     {
+        Debug.Log("Trying to update stat!!!");
         float flatModifier = 0;
         float addedMultiplier = 1;
         float trueMultiplier = 1;
+
+        Debug.Log(modifiers);
 
         for (int i = 0; i < modifiers.Count; i++)
         {
@@ -86,8 +95,11 @@ public class CharacterStat
                     }
             }
         }
-        
-        actualValue = (BaseValue + /*(ScalingPerLevel * (LevelOfChar-1))*/ + flatModifier) * addedMultiplier * trueMultiplier;
+
+        actualValue = (BaseValue + /*(ScalingPerLevel * (LevelOfChar-1))*/ +flatModifier) * addedMultiplier * trueMultiplier;
+        Debug.Log("Character Stat flatModifier: " + flatModifier);
+        Debug.Log("Character Stat addedMultiplier: " + addedMultiplier);
+        Debug.Log("Character Stat trueMultiplier: " + trueMultiplier);
     }
 
     //Adds a reference to a stat modifier to the list
@@ -118,10 +130,11 @@ public class StatModifier
     public float Value
     {
         get { return value; }
-        set { 
-                this.value = value;
-                connectedStat?.UpdateStat(); //Our value changed, so we update our connected stat
-            }
+        set
+        {
+            this.value = value;
+            connectedStat?.UpdateStat(); //Our value changed, so we update our connected stat
+        }
     }
     public MOD_TYPE Type;
     private CharacterStat connectedStat = null; //Stat that this stat modifier is connected to

@@ -31,57 +31,40 @@ namespace TurretGame
 
         public Action<int> AddItemAction;
 
-        #region Health
-        public CharacterStat newHealth;
-        protected Health _Health;
-        public Health _health { get { return _Health; } }
+        //public CharacterStat CS_HealthVar;
 
-        //-----Health-----//
-        [Header("Health Variables")]
-        [SerializeField] protected float InitialHealth;
-        public float initialHealth
-        {
-            get { return InitialHealth; }
-        }
+        public CharacterStat CS_HealthVar = new CharacterStat(5, 4, true);
+        public float F_HealthCurr;
+        public Action<float> A_Damage;
+        public Action<float> A_Death;
+        public int quacksduck;
 
-        protected float ModifiedHealth;
-        public float modifiedHealth
-        {
-            get { return ModifiedHealth; }
-            set
-            {
-                ModifiedHealth = value;
-                _Health.CurrHealth = value;
-                GlobalDebugs.DebugPM(this, "Health is now" + value);
-            }
-        }
-        #endregion
 
-        #region Ammo
-        protected Ammo _Ammo;
-        public Ammo _ammo { get { return _Ammo; } }
+        //#region Ammo
+        //protected Ammo _Ammo;
+        //public Ammo _ammo { get { return _Ammo; } }
 
-        //-----Ammo-----//
-        [Header("Ammo Variables")]
-        [SerializeField] protected int InitialAmmo;
-        public int initialAmmo
-        {
-            get { return InitialAmmo; }
-        }
+        ////-----Ammo-----//
+        //[Header("Ammo Variables")]
+        //[SerializeField] protected int InitialAmmo;
+        //public int initialAmmo
+        //{
+        //    get { return InitialAmmo; }
+        //}
 
-        protected int ModifiedAmmo;
-        public int modifiedAmmo
-        {
-            get { return ModifiedAmmo; }
-            set
-            {
-                ModifiedAmmo = value;
-                if (_Ammo != null)
-                    _Ammo.CurrAmmo = ModifiedAmmo;
-                GlobalDebugs.DebugPM(this, "Ammo is now " + value);
-            }
-        }
-        #endregion
+        //protected int ModifiedAmmo;
+        //public int modifiedAmmo
+        //{
+        //    get { return ModifiedAmmo; }
+        //    set
+        //    {
+        //        ModifiedAmmo = value;
+        //        if (_Ammo != null)
+        //            _Ammo.CurrAmmo = ModifiedAmmo;
+        //        GlobalDebugs.DebugPM(this, "Ammo is now " + value);
+        //    }
+        //}
+        //#endregion
 
         #region Movement
         protected Movement _Movement;
@@ -164,6 +147,8 @@ namespace TurretGame
                 speed.text = _Rb2D.velocity.magnitude.ToString("F2");
                 speedslider.fillAmount = Mathf.Lerp(speedslider.fillAmount, _Rb2D.velocity.magnitude / 100, Time.deltaTime);
             }
+
+
         }
 
 
@@ -171,25 +156,12 @@ namespace TurretGame
         protected virtual void Start()
         {
             InitializeComponents();
-            SubscribeEvents();
-
 
             InitializeVariables();
         }
 
         protected virtual void InitializeVariables()
         {
-            if (_Health != null)
-            {
-                _Health.MaxHealth = InitialHealth;
-                ModifiedHealth = InitialHealth;
-            }
-
-            if (_Ammo != null)
-            {
-                _Ammo.CurrAmmo = InitialAmmo;
-                modifiedAmmo = InitialAmmo;
-            }
 
             if (_Movement != null)
             {
@@ -199,19 +171,12 @@ namespace TurretGame
                 ModifiedSpeed = InitialSpeed;
                 ModifiedAcceleration = InitalAcceleration;
             }
+
+            F_HealthCurr = CS_HealthVar.BaseValue;
         }
 
         protected virtual void InitializeComponents()
         {
-            if (this.GetComponent<Health>() != null)
-                _Health = this.GetComponent<Health>();
-            else
-                GlobalDebugs.DebugPM(this, "No Health Component");
-
-            if (this.GetComponent<Ammo>() != null)
-                _Ammo = this.GetComponent<Ammo>();
-            else
-                GlobalDebugs.DebugPM(this, "No Ammo Component");
 
             if (this.GetComponent<Movement>() != null)
                 _Movement = this.GetComponent<Movement>();
@@ -224,31 +189,41 @@ namespace TurretGame
                 GlobalDebugs.DebugPM(this, "No Rigidbody2D Component");
         }
 
-        protected virtual void SubscribeEvents()
+        protected virtual void UpdateVariables()
         {
-            if (_Health != null)
-            {
-                _Health.DeathAction += OnDeath;
-                _Health.DamageAction += OnDamage;
-            }
+            CS_HealthVar.UpdateStat();
+            F_HealthCurr = CS_HealthVar.GetStat();
         }
 
-        protected virtual void OnDestroy()
+
+
+        //----------HEALTH FUNCTIONS----------//
+        protected virtual void V_Healing(float Heal)
         {
-            if (_Health != null)
+            F_HealthCurr += Heal;
+
+            if (F_HealthCurr > CS_HealthVar.GetStat())
             {
-                _Health.DeathAction -= OnDeath;
-                _Health.DamageAction -= OnDamage;
+                F_HealthCurr = CS_HealthVar.GetStat();
             }
-            GlobalDebugs.DebugPM(this, "Is Dead");
+
+            Debug.Log("ALSDFJ" + CS_HealthVar.GetStat());
         }
 
-        protected virtual void OnDamage(float Health)
+        protected virtual void V_Damage(float Damage)
         {
+            F_HealthCurr -= Damage;
+
+            if (A_Damage != null)
+                A_Damage(Damage);
+
+            if (F_HealthCurr < 0)
+                V_Death();
+
             OnDamagedEvents.Invoke();
         }
 
-        protected virtual void OnDeath()
+        protected virtual void V_Death()
         {
             OnDeathEvents.Invoke();
 
@@ -256,6 +231,10 @@ namespace TurretGame
                 itemcrap.text = getItemRarityAMT(Rarity.Common).ToString();
         }
 
+
+
+
+        //----------ITEM FUNCTIONS----------//
         public void AddItem(int AmtAdd, ItemScriptableObject Item)
         {
             if (ItemsDictionary.ContainsKey(Item.Name))
@@ -281,6 +260,8 @@ namespace TurretGame
 
             if (AddItemAction != null)
                 AddItemAction(AmtAdd);
+
+            UpdateVariables();
         }
 
 

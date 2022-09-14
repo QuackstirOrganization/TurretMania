@@ -100,16 +100,16 @@ namespace TurretGame
             //Subscribe to player events
             #region Events
 
-            //Subscribe to player input events
-            PlayerInput.ShootAction += OnPlayerShoot;
-            PlayerInput.ShootActionDown += OnPlayerShootDown;
-            PlayerInput.MoveAction += OnPlayerMove;
+            ////Subscribe to player input events
+            //PlayerInput.ShootAction += OnPlayerShoot;
+            //PlayerInput.ShootActionDown += OnPlayerShootDown;
+            //PlayerInput.MoveAction += OnPlayerMove;
 
-            //Subscribe to player shoot events
-            PlayerShooting.ShootAction += OnProjectileShot;
+            ////Subscribe to player shoot events
+            //PlayerShooting.ShootAction += OnProjectileShot;
 
-            //Subscribe to player ammo events
-            _Ammo.ReloadAction += reloadingWeapon;
+            ////Subscribe to player ammo events
+            //_Ammo.ReloadAction += reloadingWeapon;
 
             #endregion
             selectWeapon(0);
@@ -119,29 +119,41 @@ namespace TurretGame
             UpdateHealthUI();
         }
 
+        private void Update()
+        {
+            if (Input.GetKeyDown(KeyCode.L))
+            {
+                V_Damage(1);
+            }
+            if (Input.GetKeyDown(KeyCode.K))
+            {
+                V_Healing(1);
+            }
+        }
+
         //--------------------------------------------------//
         //Shooting Functions
-        void OnPlayerShoot()
-        {
-            if (_Ammo.CurrAmmo > 0)
-            {
-                PlayerShooting.isShoot();
-            }
-        }
+        //void OnPlayerShoot()
+        //{
+        //    if (_Ammo.CurrAmmo > 0)
+        //    {
+        //        PlayerShooting.isShoot();
+        //    }
+        //}
 
-        void OnPlayerShootDown()
-        {
-            if (_Ammo.CurrAmmo <= 0)
-            {
-                _Ammo.RecoilWeapon();
-            }
-        }
+        //void OnPlayerShootDown()
+        //{
+        //    if (_Ammo.CurrAmmo <= 0)
+        //    {
+        //        _Ammo.RecoilWeapon();
+        //    }
+        //}
 
-        void OnProjectileShot()
-        {
-            _Ammo.CurrAmmo--;
-            UpdateAmmoUI();
-        }
+        //void OnProjectileShot()
+        //{
+        //    _Ammo.CurrAmmo--;
+        //    UpdateAmmoUI();
+        //}
         //--------------------------------------------------//
 
         //Movement Functions
@@ -157,26 +169,26 @@ namespace TurretGame
         }
 
         //--------------------------------------------------//
-        protected override void OnDamage(float Health)
+        protected override void V_Damage(float Health)
         {
-            base.OnDamage(Health);
+            base.V_Damage(Health);
             UpdateHealthUI();
             GlobalDebugs.DebugPM(this, "Health: " + Health);
         }
 
-        protected override void OnDestroy()
+        void OnDestroy()
         {
-            base.OnDestroy();
+            //base.OnDestroy();
 
             //Subscribe to player input events
-            PlayerInput.ShootAction -= OnPlayerShoot;
+            //PlayerInput.ShootAction -= OnPlayerShoot;
             PlayerInput.MoveAction -= OnPlayerMove;
 
             //Subscribe to player shoot events
-            PlayerShooting.ShootAction -= OnProjectileShot;
+            //PlayerShooting.ShootAction -= OnProjectileShot;
 
             //Subscribe to player ammo events
-            _Ammo.ReloadAction -= reloadingWeapon;
+            //_Ammo.ReloadAction -= reloadingWeapon;
         }
         //--------------------------------------------------//
 
@@ -195,7 +207,7 @@ namespace TurretGame
             PlayerShooting.ProjectileSpeed = Weapons[indexWant].projectileSpeed;
             PlayerShooting.damage = Weapons[indexWant].damage;
             PlayerShooting.fireRate = Weapons[indexWant].fireRate;
-            _Ammo.MaxAmmo = Weapons[indexWant].ammo;
+            //_Ammo.MaxAmmo = Weapons[indexWant].ammo;
         }
         //--------------------------------------------------//
 
@@ -205,14 +217,14 @@ namespace TurretGame
         //--------------------------------------------------//
         public void UpdateHealthUI()
         {
-            if (HealthUIAction != null)
-                HealthUIAction(_Health.MaxHealth, _Health.CurrHealth);
+            //if (HealthUIAction != null)
+            //HealthUIAction(_Health.MaxHealth, _Health.CurrHealth);
         }
 
         public void UpdateAmmoUI()
         {
-            if (AmmoUIAction != null)
-                AmmoUIAction(_Ammo.MaxAmmo, _Ammo.CurrAmmo);
+            //if (AmmoUIAction != null)
+            //AmmoUIAction(_Ammo.MaxAmmo, _Ammo.CurrAmmo);
         }
 
         public void UpdateProgressUI()
@@ -226,11 +238,11 @@ namespace TurretGame
         {
             if (turretType != null)
             {
-                InitialHealth = TurretType.Health;
+                //InitialHealth = TurretType.Health;
                 InitialSpeed = TurretType.movementSpeed;
             }
 
-            newHealth.BaseValue = TurretType.Health;
+            //newHealth.BaseValue = TurretType.Health;
         }
     }
 }
