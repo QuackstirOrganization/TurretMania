@@ -12,20 +12,20 @@ namespace TurretGame
         public override void GetCharacterUnit(CharacterUnitBase characterUnit)
         {
             base.GetCharacterUnit(characterUnit);
-            initialSpeed = _characterUnit._movement.Speed;
+            //initialSpeed = _characterUnit._movement.Speed;
         }
 
         public override void EffectActivation()
         {
             base.EffectActivation();
 
-            _characterUnit._movement.Speed = newSpeed;
+            //_characterUnit._movement.Speed = newSpeed;
         }
 
         public override void RemoveEffect()
         {
             base.RemoveEffect();
-            _characterUnit._movement.Speed = _characterUnit.modifiedSpeed;
+            //_characterUnit._movement.Speed = _characterUnit.modifiedSpeed;
         }
     }
 }

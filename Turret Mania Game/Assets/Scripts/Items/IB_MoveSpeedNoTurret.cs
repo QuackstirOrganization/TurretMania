@@ -36,7 +36,7 @@ namespace TurretGame
         {
             base.ProcEffects();
 
-            _characterUnit.modifiedSpeed += currentMultiplier;
+            //_characterUnit.modifiedSpeed += currentMultiplier;
             isApplied = true;
         }
 
@@ -49,14 +49,14 @@ namespace TurretGame
 
             base.RemoveEffects();
 
-            _characterUnit.modifiedSpeed -= currentMultiplier;
+            //_characterUnit.modifiedSpeed -= currentMultiplier;
 
             isApplied = false;
         }
 
         protected override void UpdateEffects()
         {
-            updateMultipler(slopeType, _characterUnit.initalSpeed, SlopeIncrease, increasePercent);
+            //updateMultipler(slopeType, _characterUnit.initalSpeed, SlopeIncrease, increasePercent);
         }
 
     }

@@ -15,10 +15,10 @@ namespace TurretGame
             base.Start();
             if (_characterUnit.GetComponent<PlayerInputManager>() != null)
             {
-                playerInputManager = _characterUnit.GetComponent<PlayerInputManager>();
+                //playerInputManager = _characterUnit.GetComponent<PlayerInputManager>();
 
-                playerInputManager.ShootActionDown += ProcEffects;
-                playerInputManager.ShootActionUp += RemoveEffects;
+                //playerInputManager.ShootActionDown += ProcEffects;
+                //playerInputManager.ShootActionUp += RemoveEffects;
 
                 RemoveEffects();
             }
@@ -26,11 +26,11 @@ namespace TurretGame
 
         private void OnDestroy()
         {
-            if (_characterUnit.GetComponent<PlayerInputManager>() != null)
-            {
-                playerInputManager.ShootActionDown -= ProcEffects;
-                playerInputManager.ShootActionUp -= RemoveEffects;
-            }
+            //if (_characterUnit.GetComponent<PlayerInputManager>() != null)
+            //{
+            //    playerInputManager.ShootActionDown -= ProcEffects;
+            //    playerInputManager.ShootActionUp -= RemoveEffects;
+            //}
         }
 
         protected override void ProcEffects()
@@ -42,7 +42,7 @@ namespace TurretGame
 
             base.ProcEffects();
 
-            _characterUnit.modifiedSpeed -= currentMultiplier;
+            //_characterUnit.modifiedSpeed -= currentMultiplier;
 
             isApplied = false;
         }
@@ -51,15 +51,15 @@ namespace TurretGame
         {
             base.RemoveEffects();
 
-            _characterUnit.modifiedSpeed += currentMultiplier;
+            //_characterUnit.modifiedSpeed += currentMultiplier;
 
             isApplied = true;
         }
 
         protected override void UpdateEffects()
         {
-            _characterUnit.modifiedSpeed -= currentMultiplier;
-            updateMultipler(slopeType, _characterUnit.initalSpeed, SlopeIncrease, increasePercent);
+            //_characterUnit.modifiedSpeed -= currentMultiplier;
+            //updateMultipler(slopeType, _characterUnit.initalSpeed, SlopeIncrease, increasePercent);
         }
     }
 }

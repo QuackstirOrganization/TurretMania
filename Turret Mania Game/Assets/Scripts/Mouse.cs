@@ -12,11 +12,11 @@ public class Mouse : MonoBehaviour
     {
         //Cursor.visible = false;
         //To get the current mouse position
-        mousePosition = Input.mousePosition;
-        //Convert the mousePosition according to World position
-        targetPosition = Camera.main.ScreenToWorldPoint(new Vector3(mousePosition.x, mousePosition.y, distance));
-        //Set the position of targetObject
-        targetObject.position = targetPosition;
+        //mousePosition = Input.mousePosition;
+        ////Convert the mousePosition according to World position
+        //targetPosition = Camera.main.ScreenToWorldPoint(new Vector3(mousePosition.x, mousePosition.y, distance));
+        ////Set the position of targetObject
+        //targetObject.position = targetPosition;
         //Debug.Log(mousePosition+" "+targetPosition);
         //If Left Button is clicked
 

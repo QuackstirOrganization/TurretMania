@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
@@ -31,87 +32,27 @@ namespace TurretGame
 
         public Action<int> AddItemAction;
 
-        //public CharacterStat CS_HealthVar;
+        public Action<bool> A_ShootAbility;
+        public CharacterStat CS_DamageBase = new CharacterStat(5, 4, true);
 
         public CharacterStat CS_HealthVar = new CharacterStat(5, 4, true);
-        public float F_HealthCurr;
+        private float f_HealthCurr;
+        public float _HealthCurr
+        {
+            get { return f_HealthCurr; }
+        }
         public Action<float> A_Damage;
         public Action<float> A_Death;
-        public int quacksduck;
+
+        public CharacterStat CS_MovementVar = new CharacterStat(5, 5, false);
+        public float f_Acceleration;
+        public Action A_MovementAbility;
+        protected Vector2 v2_InputMoveVector;
+        private bool isMoving = false;
+
+        public Action<Vector3> A_Looking;
 
 
-        //#region Ammo
-        //protected Ammo _Ammo;
-        //public Ammo _ammo { get { return _Ammo; } }
-
-        ////-----Ammo-----//
-        //[Header("Ammo Variables")]
-        //[SerializeField] protected int InitialAmmo;
-        //public int initialAmmo
-        //{
-        //    get { return InitialAmmo; }
-        //}
-
-        //protected int ModifiedAmmo;
-        //public int modifiedAmmo
-        //{
-        //    get { return ModifiedAmmo; }
-        //    set
-        //    {
-        //        ModifiedAmmo = value;
-        //        if (_Ammo != null)
-        //            _Ammo.CurrAmmo = ModifiedAmmo;
-        //        GlobalDebugs.DebugPM(this, "Ammo is now " + value);
-        //    }
-        //}
-        //#endregion
-
-        #region Movement
-        protected Movement _Movement;
-        public Movement _movement { get { return _Movement; } }
-
-        //-----Movement-----//
-        [Header("Movement Variables")]
-        [SerializeField] protected float InitialSpeed;
-        public float initalSpeed
-        {
-            get { return InitialSpeed; }
-        }
-
-        protected float ModifiedSpeed;
-        public float modifiedSpeed
-        {
-            get { return ModifiedSpeed; }
-            set
-            {
-                ModifiedSpeed = value;
-                if (_Movement != null)
-                    _Movement.Speed = value;
-                GlobalDebugs.DebugPM(this, "Movement speed is now " + value);
-            }
-        }
-
-        [Space(5)]
-        [SerializeField] protected float InitalAcceleration;
-        public float initalAcceleration
-        {
-            get { return InitalAcceleration; }
-        }
-
-        protected float ModifiedAcceleration;
-        public float modifiedAcceleration
-        {
-            get { return ModifiedAcceleration; }
-            set
-            {
-                ModifiedAcceleration = value;
-                if (_Movement != null)
-                    _Movement.Acceleration = value;
-                GlobalDebugs.DebugPM(this, "Movement acceleration is now " + value);
-            }
-        }
-
-        #endregion
 
         #region RigidBody2D
         protected Rigidbody2D _Rb2D;
@@ -162,27 +103,11 @@ namespace TurretGame
 
         protected virtual void InitializeVariables()
         {
-
-            if (_Movement != null)
-            {
-                _Movement.Speed = InitialSpeed;
-                _Movement.Acceleration = InitalAcceleration;
-
-                ModifiedSpeed = InitialSpeed;
-                ModifiedAcceleration = InitalAcceleration;
-            }
-
-            F_HealthCurr = CS_HealthVar.BaseValue;
+            f_HealthCurr = CS_HealthVar.BaseValue;
         }
 
         protected virtual void InitializeComponents()
         {
-
-            if (this.GetComponent<Movement>() != null)
-                _Movement = this.GetComponent<Movement>();
-            else
-                GlobalDebugs.DebugPM(this, "No Movement Component");
-
             if (this.GetComponent<Rigidbody2D>() != null)
                 _Rb2D = this.GetComponent<Rigidbody2D>();
             else
@@ -192,32 +117,94 @@ namespace TurretGame
         protected virtual void UpdateVariables()
         {
             CS_HealthVar.UpdateStat();
-            F_HealthCurr = CS_HealthVar.GetStat();
+            f_HealthCurr = CS_HealthVar.GetStat();
         }
 
+        //----------SHOOTING FUNCTIONS----------//
+        protected virtual void V_ShootAbility(bool b_activation)
+        {
+            if (A_ShootAbility != null)
+                A_ShootAbility(b_activation);
+        }
+
+
+        //----------MOVEMENT FUNCTIONS----------//
+        protected virtual void V_Moving(Vector2 MoveVector)
+        {
+            v2_InputMoveVector = MoveVector;
+
+            if (!isMoving)
+                StartCoroutine(IE_AccelerateMovement());
+        }
+
+        IEnumerator IE_AccelerateMovement()
+        {
+            isMoving = true;
+
+            while (v2_InputMoveVector != Vector2.zero)
+            {
+                yield return new WaitForFixedUpdate();
+                Debug.DrawLine(transform.position, (Vector3)v2_InputMoveVector + transform.position);
+                _Rb2D.velocity = Vector2.Lerp(_Rb2D.velocity, v2_InputMoveVector * CS_MovementVar.GetStat(), Time.deltaTime * f_Acceleration);
+
+                yield return null;
+            }
+
+            if (v2_InputMoveVector == Vector2.zero)
+            {
+                StartCoroutine(IE_SlowMovement());
+                yield break;
+            }
+        }
+
+        IEnumerator IE_SlowMovement()
+        {
+            isMoving = false;
+
+            while (_Rb2D.velocity.magnitude > 0)
+            {
+                yield return new WaitForFixedUpdate();
+                _Rb2D.velocity = Vector2.Lerp(_Rb2D.velocity, Vector2.zero, Time.deltaTime * f_Acceleration);
+                if (v2_InputMoveVector != Vector2.zero)
+                {
+                    yield break;
+                }
+                yield return null;
+            }
+        }
+
+        protected virtual void V_Looking(Vector3 LookVector)
+        {
+            if (A_Looking != null)
+                A_Looking(LookVector);
+        }
+
+        protected virtual void V_MovementAbility()
+        {
+            if (A_MovementAbility != null)
+                A_MovementAbility();
+        }
 
 
         //----------HEALTH FUNCTIONS----------//
         protected virtual void V_Healing(float Heal)
         {
-            F_HealthCurr += Heal;
+            f_HealthCurr += Heal;
 
-            if (F_HealthCurr > CS_HealthVar.GetStat())
+            if (f_HealthCurr > CS_HealthVar.GetStat())
             {
-                F_HealthCurr = CS_HealthVar.GetStat();
+                f_HealthCurr = CS_HealthVar.GetStat();
             }
-
-            Debug.Log("ALSDFJ" + CS_HealthVar.GetStat());
         }
 
         protected virtual void V_Damage(float Damage)
         {
-            F_HealthCurr -= Damage;
+            f_HealthCurr -= Damage;
 
             if (A_Damage != null)
                 A_Damage(Damage);
 
-            if (F_HealthCurr < 0)
+            if (f_HealthCurr < 0)
                 V_Death();
 
             OnDamagedEvents.Invoke();

@@ -1,26 +1,19 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
 using UnityEngine.Events;
 using UnityEngine.UI;
 using Debugs;
+using UnityEngine.InputSystem;
 
 namespace TurretGame
 {
-    [Serializable]
-    public class beQuackin
-    {
-        public float huh;
-        public float wuh;
-    }
-
     public class PlayerUnit : CharacterUnitBase
     {
-        public beQuackin dobeQuackin;
-
-        private Shoot PlayerShooting;
-        private PlayerInputManager PlayerInput;
+        private Shoot _PlayerShooting;
+        private PlayerInput _playerInput;
         public TurretWeapon[] Weapons;
 
         [SerializeField] private float ExpNextLevel = 3;
@@ -34,16 +27,15 @@ namespace TurretGame
         [SerializeField] private int CurrLevel = 1;
         public int currLevel { get { return CurrLevel; } }
 
-        private Vector2 moveVectorTot;
-
         public Action<float, float> AmmoUIAction;
         public Action<float, float> HealthUIAction;
         public Action<float, float, int> ExpLevelUIAction;
 
+        Vector2 v2_inputLookVector;
+
         public ItemScriptableObject[] duck;
 
         public MonoScript quack;
-
 
         [SerializeField] private Turret TurretType;
         public Turret turretType
@@ -56,10 +48,11 @@ namespace TurretGame
                 setVariables();
             }
         }
-        //public void addDuck(System.Type aType)
-        //{
-        //    Component inst = gameObject.AddComponent(aType);
-        //}
+
+
+        public SpriteRenderer SR_Turret_Head;
+        public SpriteRenderer SR_Turret_Bottom;
+
 
         private void OnTriggerEnter2D(Collider2D collision)
         {
@@ -91,27 +84,7 @@ namespace TurretGame
         {
             base.Start();
 
-            //Find player components
-            #region Player Components
-            PlayerInput = this.GetComponent<PlayerInputManager>();
-            PlayerShooting = this.GetComponentInChildren<Shoot>();
-            #endregion
-
-            //Subscribe to player events
-            #region Events
-
-            ////Subscribe to player input events
-            //PlayerInput.ShootAction += OnPlayerShoot;
-            //PlayerInput.ShootActionDown += OnPlayerShootDown;
-            //PlayerInput.MoveAction += OnPlayerMove;
-
-            ////Subscribe to player shoot events
-            //PlayerShooting.ShootAction += OnProjectileShot;
-
-            ////Subscribe to player ammo events
-            //_Ammo.ReloadAction += reloadingWeapon;
-
-            #endregion
+            _playerInput = this.GetComponent<PlayerInput>();
             selectWeapon(0);
             setVariables();
 
@@ -119,53 +92,66 @@ namespace TurretGame
             UpdateHealthUI();
         }
 
-        private void Update()
-        {
-            if (Input.GetKeyDown(KeyCode.L))
-            {
-                V_Damage(1);
-            }
-            if (Input.GetKeyDown(KeyCode.K))
-            {
-                V_Healing(1);
-            }
-        }
-
-        //--------------------------------------------------//
-        //Shooting Functions
-        //void OnPlayerShoot()
-        //{
-        //    if (_Ammo.CurrAmmo > 0)
-        //    {
-        //        PlayerShooting.isShoot();
-        //    }
-        //}
-
-        //void OnPlayerShootDown()
-        //{
-        //    if (_Ammo.CurrAmmo <= 0)
-        //    {
-        //        _Ammo.RecoilWeapon();
-        //    }
-        //}
-
-        //void OnProjectileShot()
-        //{
-        //    _Ammo.CurrAmmo--;
-        //    UpdateAmmoUI();
-        //}
-        //--------------------------------------------------//
 
         //Movement Functions
-        void OnPlayerMove()
+        public void OnPlayerMove(InputAction.CallbackContext context)
         {
-            _Movement.Move(moveVectorTot);
+            Vector2 InputVector = context.ReadValue<Vector2>();
+            Debug.Log("Movement Vector: " + context.phase);
+            V_Moving(InputVector);
         }
 
-        void OnPlayerMove(float moveVectorX, float moveVectorY)
+        public void OnPlayerDash(InputAction.CallbackContext context)
         {
-            moveVectorTot = new Vector2(moveVectorX, moveVectorY);
-            OnPlayerMove();
+            Debug.Log("Dash: ");
+            V_MovementAbility();
+        }
+
+        public void OnPlayerShoot(InputAction.CallbackContext context)
+        {
+            bool a = context.phase != InputActionPhase.Canceled;
+
+            Debug.Log("Shoot: " + a);
+
+            V_ShootAbility(context.phase != InputActionPhase.Canceled);
+        }
+
+
+        public void OnPlayerLook(InputAction.CallbackContext context)
+        {
+            v2_inputLookVector = context.ReadValue<Vector2>();
+            if (_playerInput.currentControlScheme == "KeyboardMouse")
+            {
+                V_Looking(Camera.main.ScreenToWorldPoint(v2_inputLookVector));
+                return;
+            }
+
+
+            if (v2_inputLookVector != Vector2.zero)
+            {
+                V_Looking((Vector3)v2_inputLookVector + transform.position);
+            }
+            else
+            {
+                StartCoroutine(ChangeLooking());
+            }
+        }
+
+        IEnumerator ChangeLooking()
+        {
+            while (v2_inputLookVector == Vector2.zero)
+            {
+                yield return new WaitForFixedUpdate();
+                V_Looking((Vector3)v2_InputMoveVector + transform.position);
+
+                if (v2_inputLookVector != Vector2.zero)
+                {
+                    yield break;
+                }
+
+                yield return null;
+            }
+
         }
 
         //--------------------------------------------------//
@@ -176,21 +162,7 @@ namespace TurretGame
             GlobalDebugs.DebugPM(this, "Health: " + Health);
         }
 
-        void OnDestroy()
-        {
-            //base.OnDestroy();
 
-            //Subscribe to player input events
-            //PlayerInput.ShootAction -= OnPlayerShoot;
-            PlayerInput.MoveAction -= OnPlayerMove;
-
-            //Subscribe to player shoot events
-            //PlayerShooting.ShootAction -= OnProjectileShot;
-
-            //Subscribe to player ammo events
-            //_Ammo.ReloadAction -= reloadingWeapon;
-        }
-        //--------------------------------------------------//
 
 
 
@@ -204,9 +176,9 @@ namespace TurretGame
 
         void selectWeapon(int indexWant)
         {
-            PlayerShooting.ProjectileSpeed = Weapons[indexWant].projectileSpeed;
-            PlayerShooting.damage = Weapons[indexWant].damage;
-            PlayerShooting.fireRate = Weapons[indexWant].fireRate;
+            //_PlayerShooting.ProjectileSpeed = Weapons[indexWant].projectileSpeed;
+            //_PlayerShooting.damage = Weapons[indexWant].damage;
+            //_PlayerShooting.fireRate = Weapons[indexWant].fireRate;
             //_Ammo.MaxAmmo = Weapons[indexWant].ammo;
         }
         //--------------------------------------------------//
@@ -217,8 +189,8 @@ namespace TurretGame
         //--------------------------------------------------//
         public void UpdateHealthUI()
         {
-            //if (HealthUIAction != null)
-            //HealthUIAction(_Health.MaxHealth, _Health.CurrHealth);
+            if (HealthUIAction != null)
+                HealthUIAction(CS_HealthVar.GetStat(), _HealthCurr);
         }
 
         public void UpdateAmmoUI()
@@ -236,13 +208,7 @@ namespace TurretGame
 
         private void setVariables()
         {
-            if (turretType != null)
-            {
-                //InitialHealth = TurretType.Health;
-                InitialSpeed = TurretType.movementSpeed;
-            }
-
-            //newHealth.BaseValue = TurretType.Health;
+            CS_HealthVar.BaseValue = _HealthCurr;
         }
     }
 }
