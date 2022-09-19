@@ -109,11 +109,8 @@ namespace TurretGame
 
         public void OnPlayerShoot(InputAction.CallbackContext context)
         {
-            bool a = context.phase != InputActionPhase.Canceled;
-
-            Debug.Log("Shoot: " + a);
-
-            V_ShootAbility(context.phase != InputActionPhase.Canceled);
+            Debug.Log("Player shooting phase input: " + context.phase);
+            V_ShootAbility(context.phase);
         }
 
 

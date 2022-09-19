@@ -5,9 +5,11 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
 using Debugs;
+using UnityEngine.InputSystem;
 
 namespace TurretGame
 {
+
     public abstract class CharacterUnitBase : MonoBehaviour
     {
         public Text itemcrap;
@@ -32,7 +34,7 @@ namespace TurretGame
 
         public Action<int> AddItemAction;
 
-        public Action<bool> A_ShootAbility;
+        public Action<InputActionPhase> A_ShootAbility;
         public CharacterStat CS_DamageBase = new CharacterStat(5, 4, true);
 
         public CharacterStat CS_HealthVar = new CharacterStat(5, 4, true);
@@ -121,10 +123,10 @@ namespace TurretGame
         }
 
         //----------SHOOTING FUNCTIONS----------//
-        protected virtual void V_ShootAbility(bool b_activation)
+        protected virtual void V_ShootAbility(InputActionPhase iap_InputPhase)
         {
             if (A_ShootAbility != null)
-                A_ShootAbility(b_activation);
+                A_ShootAbility(iap_InputPhase);
         }
 
 
