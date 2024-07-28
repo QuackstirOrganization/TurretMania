@@ -78,3 +78,7 @@ Plugins/*/Intermediate/*
 
 # Cache files for the editor to use
 DerivedDataCache/*
+_Shotty Snipes/ShottySnipesProject/Build/WindowsNoEditor/FileOpenOrder/CookerOpenOrder.log
+_Shotty Snipes/ShottySnipesProject/Build/WindowsNoEditor/FileOpenOrder/EditorOpenOrder.log
+Builds/Shotty Snipes 7.27.2024/WindowsNoEditor/Manifest_NonUFSFiles_Win64.txt
+/Builds
